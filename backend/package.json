@@ -1,0 +1,20 @@
+{
+  "name": "tipspromenad-g-",
+  "version": "1.0.0",
+  "description": "Silly project for doing tipspromenad events",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cthdidIT/tipspromenad-g-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cthdidIT/tipspromenad-g-/issues"
+  },
+  "homepage": "https://github.com/cthdidIT/tipspromenad-g-#readme"
+}
