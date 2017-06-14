@@ -29,7 +29,8 @@ export default class AddQuestion extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 20
   },
   icon: {
     width: 26,

@@ -19,6 +19,24 @@ export default class App extends React.Component {
     });
   };
 
+  submitQuestion = data => {
+    postJson("/questions", data, this.state.user)
+      .then(() => {
+        this.fetchQuestions();
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
+  };
+
+  fetchQuestions = () => {
+    fetchJson("/questions").then(questions => {
+      this.setState({
+        questions
+      });
+    });
+  };
+
   async componentWillMount() {
     const user = await AsyncStorage.getItem("user");
     if (user) {
@@ -26,11 +44,7 @@ export default class App extends React.Component {
         user: JSON.parse(user)
       });
     }
-    fetchJson("/questions").then(questions => {
-      this.setState({
-        questions
-      });
-    });
+    this.fetchQuestions();
   }
 
   render() {
@@ -38,7 +52,12 @@ export default class App extends React.Component {
     if (!user) {
       return <Register onSubmit={this.createUser} />;
     } else {
-      return <Routes style={styles.container} screenProps={{ questions }} />;
+      return (
+        <Routes
+          style={styles.container}
+          screenProps={{ submitQuestion: this.submitQuestion, questions }}
+        />
+      );
     }
   }
 }

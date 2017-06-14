@@ -7,14 +7,9 @@ import {
   View
 } from "react-native";
 
+import Button from "./Button";
+
 const Center = props => <View {...props} style={{ alignItems: "center" }} />;
-const Button = ({ onPress, ...props }) =>
-  <TouchableOpacity onPress={onPress}>
-    <Text
-      {...props}
-      style={{ marginTop: 10, padding: 10, backgroundColor: "lightblue" }}
-    />
-  </TouchableOpacity>;
 
 export default class Register extends React.Component {
   state = {

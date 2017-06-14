@@ -15,11 +15,12 @@ export const myfetch = (url, options = {}) => fetch(BASE_URL + url, options);
 export const fetchJson = url =>
   myfetch(url).then(checkStatus).then(resp => resp.json());
 
-export const postJson = (url, data) =>
+export const postJson = (url, data, user) =>
   myfetch(url, {
     method: "POST",
     headers: {
-      "content-type": "application/json"
+      "content-type": "application/json",
+      Authorization: user.id
     },
     body: JSON.stringify(data)
   })
