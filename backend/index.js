@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const uuid = require('uuid')
+const _ = require('lodash')
 
 app.use(bodyParser.json())
 
@@ -24,14 +25,18 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+const getUserFromReq = (req) => { state.users[req.get('Authorization')] }
+
 app.post('/answers', (req, res) => {
   let body = req.body
+  let user = getUserFromReq(req)
+  let questionId = body.id
 
-  if(body.id && state.questions[body.id]) {
-    question = state.answers[body.id] || {}
-    question[body.nick] = body.answer
+  if(user && questionId && state.questions[questionId] && body.answer) {
+    question = state.answers[questionId] || {}
+    question[userId] = body.answer
 
-    state.answers[body.id] = question
+    state.answers[questionId] = question
 
     saveState(state, function(err) {
       if (err) {
@@ -42,15 +47,23 @@ app.post('/answers', (req, res) => {
     });
 
   } else {
-    res.status(404).json("Question not found")
+    res.status(400).json("Invalid request")
   }
 })
 
 app.get('/answers', (req, res) => {
-  res.json(state.answers)
+
+  let answers = _.mapValues(state.answers, (question) => {
+    let newQ = {}
+    Object.keys(question).forEach(k => { newQ[state.users[k].nick] = question[k] })
+    return newQ
+   });
+
+  res.json(answers)
 })
 
 app.post('/users', (req, res) => {
+  console.log("POST", req.body)
   let body = req.body
   if(body.nick) {
 
@@ -68,10 +81,10 @@ app.post('/users', (req, res) => {
 
       saveState(state, function(err) {
         if (err) {
-          res.status(404).send('User not saved');
+          res.status(404).json('User not saved');
           return;
         }
-        res.json('User saved');
+        res.json(user);
       });
     }
   } else {
@@ -80,6 +93,7 @@ app.post('/users', (req, res) => {
 })
 
 app.get('/users', (req, res) => {
+  console.log("GET", req)
   res.json(Object.values(state.users).map((u) => ({nick: u.nick})))
 })
 
@@ -89,9 +103,12 @@ app.get('/questions', (req, res) => {
 
 app.post('/questions', (req, res) => {
   let body = req.body;
-  if(body.question && body.alternatives.length === 3) {
+  let user = getUserFromReq(req)
+
+  if(user && body.question && body.alternatives.length === 3) {
     id = uuid.v4()
     body.id = id
+    body.author = user.nick
     state.questions[id] = body
 
     saveState(state, function(err) {
