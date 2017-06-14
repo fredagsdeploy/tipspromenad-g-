@@ -1,44 +1,51 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { AsyncStorage, StyleSheet, Text, TextInput, View } from "react-native";
+import { Constants } from "expo";
 
-import Question from "./Question";
+import { fetchJson, postJson } from "./fetch";
+import Routes from "./Routes";
+import Register from "./Register";
 
 export default class App extends React.Component {
   state = {
-    questions: [],
-    question: ""
+    user: null,
+    questions: []
   };
 
-  componentWillMount() {
-    fetch("http://demo0233982.mockable.io/questions")
-      .then(resp => resp.json())
-      .then(({ questions }) => {
-        this.setState({
-          questions
-        });
+  createUser = nick => {
+    postJson("/users", { nick, id: Constants.deviceId }).then(user => {
+      AsyncStorage.setItem("user", JSON.stringify(user));
+      this.setState({ user });
+    });
+  };
+
+  async componentWillMount() {
+    const user = await AsyncStorage.getItem("user");
+    if (user) {
+      this.setState({
+        user: JSON.parse(user)
       });
+    }
+    fetchJson("/questions").then(questions => {
+      this.setState({
+        questions
+      });
+    });
   }
 
-  onChange = question => this.setState({ question });
-
   render() {
-    const { question, questions } = this.state;
-    return (
-      <View style={styles.container}>
-        <TextInput value={question} onChange={this.onChange} />
-        <View>
-          {questions.map(q => <Question key={q.question} question={q} />)}
-        </View>
-      </View>
-    );
+    const { user, questions } = this.state;
+    if (!user) {
+      return <Register onSubmit={this.createUser} />;
+    } else {
+      return <Routes style={styles.container} screenProps={{ questions }} />;
+    }
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
+    marginTop: 20
   }
 });
