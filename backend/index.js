@@ -25,7 +25,9 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-const getUserFromReq = (req) => { state.users[req.get('Authorization')] }
+const getUserFromReq = (req) => {
+  return state.users[req.get('Authorization')]
+}
 
 app.post('/answers', (req, res) => {
   let body = req.body
@@ -65,13 +67,14 @@ app.get('/answers', (req, res) => {
 app.post('/users', (req, res) => {
   console.log("POST", req.body)
   let body = req.body
+
   if(body.nick) {
 
-    if(Object.values(state.users).filter(u => u.nick === body.nick).length > 0) {
+    if(Object.values(state.users).filter(u => u.nick === body.nick).length > 0 && body.id) {
       res.status(400).json("User already exists with that nick")
       return;
     } else {
-      const id = uuid.v4()
+      const id = body.id
       user = {
         nick: body.nick,
         id: id
@@ -81,7 +84,7 @@ app.post('/users', (req, res) => {
 
       saveState(state, function(err) {
         if (err) {
-          res.status(404).json('User not saved');
+          res.status(404).json('1User not saved');
           return;
         }
         res.json(user);
@@ -93,7 +96,6 @@ app.post('/users', (req, res) => {
 })
 
 app.get('/users', (req, res) => {
-  console.log("GET", req)
   res.json(Object.values(state.users).map((u) => ({nick: u.nick})))
 })
 
@@ -104,6 +106,7 @@ app.get('/questions', (req, res) => {
 app.post('/questions', (req, res) => {
   let body = req.body;
   let user = getUserFromReq(req)
+  console.log("questions", user, body)
 
   if(user && body.question && body.alternatives.length === 3) {
     id = uuid.v4()
@@ -126,7 +129,7 @@ app.post('/questions', (req, res) => {
 })
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
+  console.log('App listening on port 3000!')
 })
 
 function saveState(state, callback) {
