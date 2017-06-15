@@ -22,8 +22,9 @@ export default class Register extends React.Component {
 
   render() {
     const { nick } = this.state;
+    const { style } = this.props;
     return (
-      <View style={styles.container}>
+      <View style={[style, styles.container]}>
         <Center>
           <Text style={styles.header}>Skriv in nick, änna</Text>
 

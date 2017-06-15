@@ -2,6 +2,7 @@ import { TabNavigator } from "react-navigation";
 
 import QuestionList from "./QuestionList";
 import AddQuestion from "./AddQuestion";
+import DistanceView from "./DistanceView";
 
 const Routes = TabNavigator(
   {
@@ -10,6 +11,9 @@ const Routes = TabNavigator(
     },
     AddOwn: {
       screen: AddQuestion
+    },
+    Distance: {
+      screen: DistanceView
     }
   },
   {

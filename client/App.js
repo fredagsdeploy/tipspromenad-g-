@@ -58,13 +58,14 @@ export default class App extends React.Component {
   render() {
     const { user, questions } = this.state;
     if (!user) {
-      return <Register onSubmit={this.createUser} />;
+      return <Register style={styles.container} onSubmit={this.createUser} />;
     } else {
       return (
-        <Routes
-          style={styles.container}
-          screenProps={{ submitQuestion: this.submitQuestion, questions }}
-        />
+        <View style={styles.container}>
+          <Routes
+            screenProps={{ submitQuestion: this.submitQuestion, questions }}
+          />
+      </View>
       );
     }
   }
@@ -73,6 +74,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20
+    paddingTop: Constants.statusBarHeight,
   }
 });
