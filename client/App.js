@@ -23,9 +23,6 @@ export default class App extends React.Component {
     return postJson("/questions", data, Constants.deviceId)
       .then(() => {
         this.fetchQuestions();
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
       });
   };
 

@@ -27,7 +27,7 @@ export default class AddQuestion extends React.Component {
   state = {
     newQuestion: {
       question: "",
-      alternatives: [""]
+      alternatives: ["", "", ""]
     },
     error: null
   };
@@ -47,8 +47,9 @@ export default class AddQuestion extends React.Component {
         this.setState({
           newQuestion: {
             question: "",
-            alternatives: [""]
-          }
+            alternatives: ["", "", ""]
+          },
+          error: null
         });
       }).catch(({msg}) => {
         this.setState({
@@ -98,7 +99,6 @@ export default class AddQuestion extends React.Component {
             <Text style={styles.header}>Ge lite alternativ, änna</Text>
           </View>
           <View>
-            <Button onPress={this.addAlternative}>Lägg till alternativ</Button>
             {alternatives.map((alt, index) =>
               <Alternative
                 value={alt}
