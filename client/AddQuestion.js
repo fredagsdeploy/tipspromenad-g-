@@ -25,39 +25,62 @@ export default class AddQuestion extends React.Component {
   };
 
   state = {
-    question: "",
-    alternatives: [""]
+    newQuestion: {
+      question: "",
+      alternatives: [""]
+    },
+    error: null
   };
 
   addAlternative = () =>
     this.setState(state => ({
-      alternatives: [...state.alternatives, ""]
+      newQuestion: {
+        ...state.newQuestion,
+        alternatives: [...state.alternatives, ""]
+      }
     }));
 
   submitQuestion = () => {
-    const state = { ...this.state };
-    this.props.screenProps.submitQuestion(state);
-    this.setState({
-      question: "",
-      alternatives: [""]
-    });
+    const state = this.state.newQuestion;
+    this.props.screenProps.submitQuestion(state)
+      .then(() => {
+        this.setState({
+          newQuestion: {
+            question: "",
+            alternatives: [""]
+          }
+        });
+      }).catch(({msg}) => {
+        this.setState({
+          error: msg
+        })
+      });
+    
   };
 
-  onChange = question => this.setState({ question });
+  onChange = question => this.setState(state => ({
+    newQuestion: {
+      ...state.newQuestion,
+      question
+    }
+  }));
 
   onChangeAlternative = (index, value) =>
     this.setState(state => ({
-      alternatives: state.alternatives.map((v, i) => {
-        if (i === index) {
-          return value;
-        } else {
-          return v;
-        }
-      })
+      newQuestion: {
+        ...state.newQuestion,
+        alternatives: state.newQuestion.alternatives.map((v, i) => {
+          if (i === index) {
+            return value;
+          } else {
+            return v;
+          }
+        })
+      }
     }));
 
   render() {
-    const { question, alternatives, questions } = this.state;
+    const { newQuestion: {question, alternatives}, error} = this.state;
     return (
       <ScrollView style={styles.container}>
         <Center>
@@ -85,6 +108,7 @@ export default class AddQuestion extends React.Component {
             )}
           </View>
           <Button onPress={this.submitQuestion}>Skapa fråga</Button>
+           {error && <Text style={styles.error}>{error}</Text>}
         </Center>
       </ScrollView>
     );
@@ -114,5 +138,9 @@ const styles = StyleSheet.create({
   icon: {
     width: 26,
     height: 26
+  },
+  error: {
+    marginTop: 10,
+    color: "tomato"
   }
 });

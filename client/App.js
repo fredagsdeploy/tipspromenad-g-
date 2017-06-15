@@ -20,7 +20,7 @@ export default class App extends React.Component {
   };
 
   submitQuestion = data => {
-    postJson("/questions", data, Constants.deviceId)
+    return postJson("/questions", data, Constants.deviceId)
       .then(() => {
         this.fetchQuestions();
       })
