@@ -49,7 +49,7 @@ export default class App extends React.Component {
   };
 
   async componentWillMount() {
-    const user = this.getUser();
+    const user = await this.getUser();
     if (user) {
       this.setState({
         user
