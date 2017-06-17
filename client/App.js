@@ -9,26 +9,25 @@ import Register from "./Register";
 export default class App extends React.Component {
   state = {
     user: null,
+    loading: false,
     questions: []
   };
 
-  createUser = nick => {
-    postJson("/users", { nick, id: Constants.deviceId }).then(user => {
-      AsyncStorage.setItem("user", JSON.stringify(user));
-      this.setState({ user });
+  submitQuestion = data => {
+    return postJson("/questions", data, Constants.deviceId).then(() => {
+      this.fetchQuestions();
     });
   };
 
-  submitQuestion = data => {
-    return postJson("/questions", data, Constants.deviceId)
-      .then(() => {
-        this.fetchQuestions();
-      });
-  };
+  setUser = user => this.setState({ user });
 
   fetchQuestions = () => {
+    this.setState({
+      loading: true
+    });
     fetchJson("/questions").then(questions => {
       this.setState({
+        loading: false,
         questions
       });
     });
@@ -58,14 +57,14 @@ export default class App extends React.Component {
   render() {
     const { user, questions } = this.state;
     if (!user) {
-      return <Register style={styles.container} onSubmit={this.createUser} />;
+      return <Register style={styles.container} setUser={this.setUser} />;
     } else {
       return (
         <View style={styles.container}>
           <Routes
             screenProps={{ submitQuestion: this.submitQuestion, questions }}
           />
-      </View>
+        </View>
       );
     }
   }
@@ -74,6 +73,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight,
+    paddingTop: Constants.statusBarHeight
   }
 });
