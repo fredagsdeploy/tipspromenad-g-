@@ -9,24 +9,13 @@ import {
 } from "react-native";
 
 export default class Question extends React.PureComponent {
-  state = {
-    open: false
-  };
-
-  toggleOpen = () => {
-    this.setState(state => ({
-      open: !state.open
-    }));
-  };
-
   render() {
-    const { open } = this.state;
-    const { question } = this.props;
+    const { open, question, onPressHeader } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.row}>
           <Image source={require("./quest.png")} style={styles.icon} />
-          <TouchableOpacity onPress={this.toggleOpen}>
+          <TouchableOpacity onPress={onPressHeader}>
             <Text style={styles.header}>{question.question}</Text>
           </TouchableOpacity>
         </View>
