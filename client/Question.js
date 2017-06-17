@@ -8,6 +8,8 @@ import {
   View
 } from "react-native";
 
+import { primaryColor } from "./config";
+
 const PREFIX = ["1", "X", "2"];
 
 export default class Question extends React.PureComponent {
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 26,
     height: 26,
-    tintColor: "#e91e63"
+    tintColor: primaryColor
   },
   header: {
     fontSize: 20,
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
   prefix: {
     fontSize: 18,
     fontWeight: "900",
-    color: "#e91e63"
+    color: primaryColor
   },
   alternativeText: {
     padding: 5

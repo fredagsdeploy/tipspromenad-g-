@@ -55,14 +55,18 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { user, questions } = this.state;
+    const { user, questions, loading } = this.state;
     if (!user) {
       return <Register style={styles.container} setUser={this.setUser} />;
     } else {
       return (
         <View style={styles.container}>
           <Routes
-            screenProps={{ submitQuestion: this.submitQuestion, questions }}
+            screenProps={{
+              submitQuestion: this.submitQuestion,
+              loading,
+              questions
+            }}
           />
         </View>
       );
