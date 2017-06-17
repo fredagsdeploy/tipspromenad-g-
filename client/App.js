@@ -10,13 +10,18 @@ export default class App extends React.Component {
   state = {
     user: null,
     loading: false,
-    questions: []
+    questions: [],
+    distance: 99
   };
 
   submitQuestion = data => {
     return postJson("/questions", data, Constants.deviceId).then(() => {
       this.fetchQuestions();
     });
+  };
+
+  setDistance = distance => {
+    this.setState({ distance });
   };
 
   setUser = user => this.setState({ user });
@@ -60,7 +65,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { user, questions, loading } = this.state;
+    const { user, questions, loading, distance } = this.state;
     if (!user) {
       return <Register style={styles.container} setUser={this.setUser} />;
     } else {
@@ -70,7 +75,9 @@ export default class App extends React.Component {
             screenProps={{
               submitQuestion: this.submitQuestion,
               loading,
-              questions
+              questions,
+              distance,
+              setDistance: this.setDistance
             }}
           />
         </View>

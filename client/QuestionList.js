@@ -22,9 +22,19 @@ export default class QuestionList extends React.Component {
       />
   };
 
+  getUnlockedCount = () => Math.floor(this.props.screenProps.distance / 50);
+
   state = {
-    openKey: null
+    openKey: null,
+    unlockCount: this.getUnlockedCount()
   };
+
+  // componentWillUpdate(nextProps, nextState) {
+  //   console.log("Component will update, new distance", nextProps.screenProps.distance);
+  //   this.setState({
+  //     unlockCount: this.getUnlockedCount()
+  //   });
+  // }
 
   setOpen = key => {
     this.setState({ openKey: key });
@@ -32,7 +42,7 @@ export default class QuestionList extends React.Component {
 
   render() {
     const { questions, loading } = this.props.screenProps;
-    const { openKey } = this.state;
+    const { openKey, unlockCount } = this.state;
 
     if (loading) {
       return (
@@ -41,17 +51,19 @@ export default class QuestionList extends React.Component {
         </View>
       );
     }
-
+    console.log("unlockedCount: ", unlockCount);
     return (
       <ScrollView style={styles.container}>
-        {questions.map(q =>
-          <Question
-            onPressHeader={() => this.setOpen(q.id)}
-            open={q.id === openKey}
-            key={q.id}
-            question={q}
-          />
-        )}
+        {questions
+          .slice(0, unlockCount)
+          .map(q =>
+            <Question
+              onPressHeader={() => this.setOpen(q.id)}
+              open={q.id === openKey}
+              key={q.id}
+              question={q}
+            />
+          )}
       </ScrollView>
     );
   }

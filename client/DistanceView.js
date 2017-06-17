@@ -15,7 +15,6 @@ export default class DistanceView extends React.Component {
   };
 
   state = {
-    distance: 0,
     latitude: 0,
     longitude: 0,
     altitude: 0
@@ -30,7 +29,7 @@ export default class DistanceView extends React.Component {
     }
 
     Location.watchPositionAsync(
-      { enableHighAccuracy: true, distanceInterval: 50 },
+      { enableHighAccuracy: true, distanceInterval: 1 },
       this.positionUpdate
     );
   }
@@ -75,10 +74,10 @@ export default class DistanceView extends React.Component {
         longitude
       );
 
-      console.log(`I moved ${distance}m`);
-
+      this.props.screenProps.setDistance(
+        Math.round(this.props.screenProps.distance + distance)
+      );
       return {
-        distance: Math.round(state.distance + distance),
         latitude,
         longitude,
         altitude
@@ -87,7 +86,7 @@ export default class DistanceView extends React.Component {
   };
 
   render() {
-    const { distance } = this.state;
+    const { distance } = this.props.screenProps;
 
     return (
       <View style={styles.container}>
