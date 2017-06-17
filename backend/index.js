@@ -119,7 +119,12 @@ app.post("/questions", (req, res) => {
   let user = getUserFromReq(req);
   console.log("questions", user, body);
 
-  if (user && body.question && body.alternatives.length === 3 && body.alternatives.every(x => x !== "")) {
+  if (
+    user &&
+    body.question &&
+    body.alternatives.length === 3 &&
+    body.alternatives.every(x => x !== "")
+  ) {
     id = uuid.v4();
     body.id = id;
     body.author = user.nick;

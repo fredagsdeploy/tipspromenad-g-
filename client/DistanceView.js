@@ -30,7 +30,7 @@ export default class DistanceView extends React.Component {
     }
 
     Location.watchPositionAsync(
-      { enableHighAccuracy: true, distanceInterval: 10 },
+      { enableHighAccuracy: true, distanceInterval: 50 },
       this.positionUpdate
     );
   }

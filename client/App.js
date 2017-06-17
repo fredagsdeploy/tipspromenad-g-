@@ -25,12 +25,17 @@ export default class App extends React.Component {
     this.setState({
       loading: true
     });
-    fetchJson("/questions").then(questions => {
-      this.setState({
-        loading: false,
-        questions
+    fetchJson("/questions")
+      .then(questions => {
+        console.log("questions", questions);
+        this.setState({
+          loading: false,
+          questions
+        });
+      })
+      .catch(err => {
+        console.log("err", JSON.stringify(err));
       });
-    });
   };
 
   getUser = async () => {
