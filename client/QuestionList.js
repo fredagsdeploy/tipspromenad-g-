@@ -1,11 +1,20 @@
 import React from "react";
-import { StyleSheet, Text, Image, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Image,
+  ActivityIndicator,
+  View,
+  ScrollView
+} from "react-native";
 
 import Question from "./Question";
 
+import { primaryColor } from "./config";
+
 export default class QuestionList extends React.Component {
   static navigationOptions = {
-    tabBarLabel: "List",
+    tabBarLabel: "Upplåsta",
     tabBarIcon: ({ tintColor }) =>
       <Image
         source={require("./list.png")}
@@ -22,8 +31,16 @@ export default class QuestionList extends React.Component {
   };
 
   render() {
-    const { questions } = this.props.screenProps;
+    const { questions, loading } = this.props.screenProps;
     const { openKey } = this.state;
+
+    if (loading) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" />
+        </View>
+      );
+    }
 
     return (
       <ScrollView style={styles.container}>

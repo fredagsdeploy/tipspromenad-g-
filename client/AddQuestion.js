@@ -16,7 +16,7 @@ const Alternative = ({ onChange, value }) =>
 
 export default class AddQuestion extends React.Component {
   static navigationOptions = {
-    tabBarLabel: "Add",
+    tabBarLabel: "Ny",
     tabBarIcon: ({ tintColor }) =>
       <Image
         source={require("./plus.png")}
@@ -42,7 +42,8 @@ export default class AddQuestion extends React.Component {
 
   submitQuestion = () => {
     const state = this.state.newQuestion;
-    this.props.screenProps.submitQuestion(state)
+    this.props.screenProps
+      .submitQuestion(state)
       .then(() => {
         this.setState({
           newQuestion: {
@@ -51,20 +52,21 @@ export default class AddQuestion extends React.Component {
           },
           error: null
         });
-      }).catch(({msg}) => {
+      })
+      .catch(({ msg }) => {
         this.setState({
           error: msg
-        })
+        });
       });
-    
   };
 
-  onChange = question => this.setState(state => ({
-    newQuestion: {
-      ...state.newQuestion,
-      question
-    }
-  }));
+  onChange = question =>
+    this.setState(state => ({
+      newQuestion: {
+        ...state.newQuestion,
+        question
+      }
+    }));
 
   onChangeAlternative = (index, value) =>
     this.setState(state => ({
@@ -81,7 +83,7 @@ export default class AddQuestion extends React.Component {
     }));
 
   render() {
-    const { newQuestion: {question, alternatives}, error} = this.state;
+    const { newQuestion: { question, alternatives }, error } = this.state;
     return (
       <ScrollView style={styles.container}>
         <Center>
@@ -96,7 +98,7 @@ export default class AddQuestion extends React.Component {
         </Center>
         <Center>
           <View style={{ marginTop: 20 }}>
-            <Text style={styles.header}>Ge lite alternativ, änna</Text>
+            <Text style={styles.header}>Ge tre alternativ, änna</Text>
           </View>
           <View>
             {alternatives.map((alt, index) =>
@@ -108,7 +110,7 @@ export default class AddQuestion extends React.Component {
             )}
           </View>
           <Button onPress={this.submitQuestion}>Skapa fråga</Button>
-           {error && <Text style={styles.error}>{error}</Text>}
+          {error && <Text style={styles.error}>{error}</Text>}
         </Center>
       </ScrollView>
     );
