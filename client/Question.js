@@ -8,6 +8,8 @@ import {
   View
 } from "react-native";
 
+const PREFIX = ["1", "X", "2"];
+
 export default class Question extends React.PureComponent {
   render() {
     const { open, question, onPressHeader } = this.props;
@@ -21,9 +23,14 @@ export default class Question extends React.PureComponent {
         </View>
         {open &&
           <View style={styles.alternatives}>
-            {question.alternatives.map(alt =>
+            {question.alternatives.map((alt, i) =>
               <TouchableOpacity key={alt}>
-                <Text style={styles.alternative}>{alt}</Text>
+                <View style={styles.alternativeBox}>
+                  <Text style={styles.prefix}>
+                    {PREFIX[i % PREFIX.length]}
+                  </Text>
+                  <Text style={styles.alternativeText}>{alt}</Text>
+                </View>
               </TouchableOpacity>
             )}
           </View>}
@@ -55,7 +62,17 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginBottom: 20
   },
-  alternative: {
+  alternativeBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 5
+  },
+  prefix: {
+    fontSize: 18,
+    fontWeight: "900",
+    color: "#e91e63"
+  },
+  alternativeText: {
     padding: 5
   }
 });
