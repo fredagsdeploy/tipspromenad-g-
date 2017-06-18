@@ -62,9 +62,6 @@ export default class App extends React.Component {
   setUser = user => this.setState({ user });
 
   fetchQuestions = async () => {
-    this.setState({
-      loading: true
-    });
     try {
       const questions = await fetchJson("/questions");
       console.log("questions", questions);
@@ -80,6 +77,9 @@ export default class App extends React.Component {
   getUser = () => fetchMe(Constants.deviceId);
 
   async componentWillMount() {
+    this.setState({
+      loading: true
+    });
     this.fetchQuestions();
     try {
       const user = await this.getUser();
