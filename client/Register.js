@@ -29,8 +29,8 @@ export default class Register extends React.Component {
         AsyncStorage.setItem("user", JSON.stringify(user));
         this.props.setUser(user);
       })
-      .catch(error => {
-        this.setState({ error, nick: "" });
+      .catch(({ msg }) => {
+        this.setState({ error: msg, nick: "" });
       });
   };
 

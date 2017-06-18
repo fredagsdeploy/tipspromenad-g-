@@ -1,5 +1,4 @@
 const BASE_URL = "http://83.254.26.186:3001";
-//const BASE_URL = "http://192.168.1.7:3000";
 
 const checkStatus = response => {
   if (response.status >= 200 && response.status < 300) {

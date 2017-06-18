@@ -36,7 +36,7 @@ app.post("/answers", (req, res) => {
 
   if (user && questionId && state.questions[questionId] && body.answer) {
     question = state.answers[questionId] || {};
-    question[userId] = body.answer;
+    question[user.id] = body.answer;
 
     state.answers[questionId] = question;
 
@@ -45,16 +45,18 @@ app.post("/answers", (req, res) => {
         res.status(404).send("Answer not saved");
         return;
       }
-      res.json("Answer saved");
+      res.json({ msg: "Answer saved" });
     });
   } else {
-    res.status(400).json("Invalid request");
+    res.status(400).json({ msg: "Invalid request" });
   }
 });
 
 app.get("/me", (req, res) => {
   const user = getUserFromReq(req);
+  console.log("Trying to login", user, req.get("Authorization"));
   if (user) {
+    console.log("Success");
     res.json(user);
   } else {
     res.status(401);
@@ -82,7 +84,7 @@ app.post("/users", (req, res) => {
       Object.values(state.users).filter(u => u.nick === body.nick).length > 0 &&
       body.id
     ) {
-      res.status(400).json("User already exists with that nick");
+      res.status(400).json({ msg: "User already exists with that nick" });
       return;
     } else {
       const id = body.id;
@@ -95,14 +97,14 @@ app.post("/users", (req, res) => {
 
       saveState(state, function(err) {
         if (err) {
-          res.status(404).json("1User not saved");
+          res.status(404).json({ msg: "User not saved" });
           return;
         }
         res.json(user);
       });
     }
   } else {
-    res.status(400).json("User must have nick");
+    res.status(400).json({ msg: "User must have nick" });
   }
 });
 
@@ -136,7 +138,7 @@ app.post("/questions", (req, res) => {
         return;
       }
 
-      res.json("Question saved");
+      res.json({ msg: "Question saved" });
     });
   } else {
     res.status(400).json({ msg: "Invalid question format" });

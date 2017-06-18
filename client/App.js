@@ -6,6 +6,7 @@ import { fetchJson, fetchMe, postJson } from "./fetch";
 import Routes from "./Routes";
 import Register from "./Register";
 
+import { unlockDistanceInterval } from "./config";
 import _ from "lodash";
 
 export default class App extends React.Component {
@@ -13,6 +14,7 @@ export default class App extends React.Component {
     user: null,
     loading: false,
     questions: [],
+    answers: {},
     distance: 0
   };
 
@@ -22,16 +24,25 @@ export default class App extends React.Component {
     });
   };
 
+  submitAnswer = (questionId, answer) => {
+    return postJson(
+      "/answers",
+      { id: questionId, answer },
+      Constants.deviceId
+    ).then(() => {
+      this.fetchAnswers();
+    });
+  };
+
   setDistance = distance => {
-    this.setState({ distance });
-    _.throttle(this.persistDistance, 1000);
+    this.setState({ distance }, _.throttle(this.persistDistance, 1000));
   };
 
   persistDistance = () => {
     try {
-      AsyncStorage.setItem("distance", this.state.distance);
+      AsyncStorage.setItem("distance", this.state.distance + "");
     } catch (err) {
-      console.error("Could not store distance in persistance storage.", err);
+      console.log("Could not store distance in persistance storage.", err);
     }
   };
 
@@ -40,57 +51,67 @@ export default class App extends React.Component {
       const distance = await AsyncStorage.getItem("distance");
       if (distance !== null) {
         this.setState({
-          distance
+          distance: parseInt(distance, 10)
         });
+      } else {
+        console.log("No previous distance. Starting from 0");
       }
     } catch (err) {
-      console.log("No previous distance. Starting from 0");
+      console.log("Couldn't load persisted distance", err);
     }
   };
 
   setUser = user => this.setState({ user });
 
-  fetchQuestions = () => {
+  fetchQuestions = async () => {
+    try {
+      const questions = await fetchJson("/questions");
+      this.setState({
+        loading: false,
+        questions
+      });
+    } catch (err) {
+      console.log("err", JSON.stringify(err));
+    }
+  };
+
+  fetchAnswers = async () => {
+    try {
+      const answers = await fetchJson("/answers");
+      this.setState({
+        answers
+      });
+    } catch (err) {
+      console.log("err", JSON.stringify(err));
+    }
+  };
+
+  getUser = () => fetchMe(Constants.deviceId);
+
+  async componentWillMount() {
     this.setState({
       loading: true
     });
-    fetchJson("/questions")
-      .then(questions => {
-        console.log("questions", questions);
-        this.setState({
-          loading: false,
-          questions
-        });
-      })
-      .catch(err => {
-        console.log("err", JSON.stringify(err));
-      });
-  };
-
-  getUser = async () => {
-    const storedUser = await AsyncStorage.getItem("user");
-    if (storedUser) {
-      return JSON.parse(storedUser);
-    } else {
-      const id = Constants.deviceId;
-      const fetchedUser = await fetchMe(id);
-      return fetchedUser;
-    }
-  };
-
-  async componentWillMount() {
-    const user = await this.getUser();
-    this.loadPersistDistance();
-    if (user) {
-      this.setState({
-        user
-      });
-    }
     this.fetchQuestions();
+    this.fetchAnswers();
+    this.loadPersistDistance();
+
+    try {
+      const user = await this.getUser();
+      console.log("GetUser resp", user);
+      if (user) {
+        this.setState({
+          user
+        });
+      }
+    } catch (e) {
+      console.log("could not load user", e);
+    }
   }
 
   render() {
-    const { user, questions, loading, distance } = this.state;
+    const { user, questions, answers, loading, distance } = this.state;
+    console.log("user in render", user);
     if (!user) {
       return <Register style={styles.container} setUser={this.setUser} />;
     } else {
@@ -100,9 +121,16 @@ export default class App extends React.Component {
             screenProps={{
               submitQuestion: this.submitQuestion,
               loading,
+              answers,
               questions,
               distance,
-              setDistance: this.setDistance
+              userId: user.nick,
+              setDistance: this.setDistance,
+              submitAnswer: this.submitAnswer,
+              unlockCount: Math.min(
+                Math.floor(distance / unlockDistanceInterval),
+                questions.length
+              )
             }}
           />
         </View>

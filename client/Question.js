@@ -8,13 +8,20 @@ import {
   View
 } from "react-native";
 
-import { primaryColor } from "./config";
+import { primaryColor, selectColor } from "./config";
 
 const PREFIX = ["1", "X", "2"];
 
 export default class Question extends React.PureComponent {
   render() {
-    const { open, question, unlocked, onPressHeader } = this.props;
+    const {
+      open,
+      question,
+      userAnswer,
+      unlocked,
+      onPressHeader,
+      submitAnswer
+    } = this.props;
 
     if (!unlocked) {
       return (
@@ -43,8 +50,18 @@ export default class Question extends React.PureComponent {
         {open &&
           <View style={styles.alternatives}>
             {question.alternatives.map((alt, i) =>
-              <TouchableOpacity key={alt}>
+              <TouchableOpacity
+                key={alt}
+                onPress={() => submitAnswer(question.id, alt)}
+              >
                 <View style={styles.alternativeBox}>
+                  <View style={styles.placeholder}>
+                    {alt === userAnswer &&
+                      <Image
+                        style={[styles.icon, styles.selectedPrefix]}
+                        source={require("./res/check.png")}
+                      />}
+                  </View>
                   <Text style={styles.prefix}>
                     {PREFIX[i % PREFIX.length]}
                   </Text>
@@ -86,10 +103,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 5
   },
+  placeholder: {
+    width: 26
+  },
   prefix: {
     fontSize: 18,
     fontWeight: "900",
     color: primaryColor
+  },
+  selectedPrefix: {
+    tintColor: selectColor,
+    marginRight: 5
   },
   alternativeText: {
     padding: 5

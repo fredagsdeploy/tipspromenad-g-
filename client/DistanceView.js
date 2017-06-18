@@ -5,11 +5,14 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  View
+  View,
+  Alert
 } from "react-native";
-import { Constants, Location, Permissions } from "expo";
+import { Constants, Location, Permissions, Audio } from "expo";
 
 import { distanceUpdateInterval } from "./config";
+
+import _ from "lodash";
 
 import Question from "./Question";
 
@@ -29,7 +32,30 @@ export default class DistanceView extends React.Component {
     altitude: 0
   };
 
+  playRandomSound = () => {
+    const sound = _.sample(this.sounds);
+    sound.playAsync().then(() => sound.setPositionAsync(0));
+  };
+
+  loadSounds = async () => {
+    const sounds = [
+      require("./res/plopp.mp3"),
+      require("./res/nyfraga.mp3"),
+      require("./res/fart.mp3")
+    ].map(res => {
+      let sound = new Audio.Sound();
+      return sound.loadAsync(res).then(() => sound);
+    });
+
+    try {
+      this.sounds = await Promise.all(sounds);
+    } catch (error) {
+      console.log("Could not load sound", error);
+    }
+  };
+
   async componentWillMount() {
+    this.loadSounds();
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== "granted") {
       this.setState({
@@ -77,21 +103,20 @@ export default class DistanceView extends React.Component {
           altitude
         };
       }
+      const { distance } = this.props.screenProps;
 
       const latDiff = state.latitude - latitude;
       const lonDiff = state.longitude - longitude;
       const altDiff = state.altitude - altitude;
 
-      const distance = this.measure(
+      const newDistance = this.measure(
         state.latitude,
         state.longitude,
         latitude,
         longitude
       );
 
-      this.props.screenProps.setDistance(
-        Math.round(this.props.screenProps.distance + distance)
-      );
+      this.props.screenProps.setDistance(Math.round(distance + newDistance));
       return {
         latitude,
         longitude,
@@ -99,6 +124,29 @@ export default class DistanceView extends React.Component {
       };
     });
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.screenProps.unlockCount !== this.props.screenProps.unlockCount
+    ) {
+      this.playRandomSound();
+      Alert.alert(
+        "Ny fråga, va!",
+        "Du har en ny fråga att svara på, änna",
+        [
+          {
+            text: "Jajjamen vettu",
+            onPress: () => this.props.navigation.navigate("Home")
+          },
+          {
+            text: "Nahh, tarn senare",
+            style: "cancel"
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+  }
 
   render() {
     const { distance } = this.props.screenProps;
