@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { Constants, Location, Permissions } from "expo";
+import { Constants, Location, Permissions, Audio } from "expo";
 
 import { distanceUpdateInterval } from "./config";
 
@@ -30,6 +30,8 @@ export default class DistanceView extends React.Component {
   };
 
   async componentWillMount() {
+    this.soundObject = Audio.Sound.create(require("./res/plopp.mp3"));
+
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== "granted") {
       this.setState({
