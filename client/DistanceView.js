@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, Image, FlatList, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  View
+} from "react-native";
 import { Constants, Location, Permissions } from "expo";
 
 import { distanceUpdateInterval } from "./config";
@@ -35,6 +42,12 @@ export default class DistanceView extends React.Component {
       this.positionUpdate
     );
   }
+
+  REMOVEINPROD_increaseDistance = () => {
+    const { setDistance, distance } = this.props.screenProps;
+
+    setDistance(distance + 10);
+  };
 
   measure = (lat1, lon1, lat2, lon2) => {
     // generally used geo measurement function
@@ -92,7 +105,9 @@ export default class DistanceView extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.distanceDisplay}>{distance}m</Text>
+        <TouchableOpacity onPress={this.REMOVEINPROD_increaseDistance}>
+          <Text style={styles.distanceDisplay}>{distance}m</Text>
+        </TouchableOpacity>
       </View>
     );
   }
