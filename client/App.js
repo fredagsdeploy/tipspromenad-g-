@@ -61,43 +61,37 @@ export default class App extends React.Component {
 
   setUser = user => this.setState({ user });
 
-  fetchQuestions = () => {
+  fetchQuestions = async () => {
     this.setState({
       loading: true
     });
-    fetchJson("/questions")
-      .then(questions => {
-        console.log("questions", questions);
-        this.setState({
-          loading: false,
-          questions
-        });
-      })
-      .catch(err => {
-        console.log("err", JSON.stringify(err));
+    try {
+      const questions = await fetchJson("/questions");
+      console.log("questions", questions);
+      this.setState({
+        loading: false,
+        questions
       });
-  };
-
-  getUser = async () => {
-    const storedUser = await AsyncStorage.getItem("user");
-    if (storedUser) {
-      return JSON.parse(storedUser);
-    } else {
-      const id = Constants.deviceId;
-      const fetchedUser = await fetchMe(id);
-      return fetchedUser;
+    } catch (err) {
+      console.log("err", JSON.stringify(err));
     }
   };
+
+  getUser = () => fetchMe(Constants.deviceId);
 
   async componentWillMount() {
-    const user = await this.getUser();
-    this.loadPersistDistance();
-    if (user) {
-      this.setState({
-        user
-      });
-    }
     this.fetchQuestions();
+    try {
+      const user = await this.getUser();
+      this.loadPersistDistance();
+      if (user) {
+        this.setState({
+          user
+        });
+      }
+    } catch (e) {
+      console.log("could not load user", e);
+    }
   }
 
   render() {
