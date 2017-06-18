@@ -8,7 +8,7 @@ import {
   View
 } from "react-native";
 
-import { primaryColor } from "./config";
+import { primaryColor, selectColor } from "./config";
 
 const PREFIX = ["1", "X", "2"];
 
@@ -19,7 +19,8 @@ export default class Question extends React.PureComponent {
       question,
       unlocked,
       onPressHeader,
-      submitAnswer
+      submitAnswer,
+      answers
     } = this.props;
 
     if (!unlocked) {
@@ -49,6 +50,10 @@ export default class Question extends React.PureComponent {
                 onPress={() => submitAnswer(question.id, alt)}
               >
                 <View style={styles.alternativeBox}>
+                  <Image
+                    style={[styles.prefix, styles.icon, styles.selectedPrefix]}
+                    source={require("./res/check.png")}
+                  />
                   <Text style={styles.prefix}>
                     {PREFIX[i % PREFIX.length]}
                   </Text>
@@ -94,6 +99,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "900",
     color: primaryColor
+  },
+  selectedPrefix: {
+    tintColor: selectColor,
+    marginRight: 5
   },
   alternativeText: {
     padding: 5
