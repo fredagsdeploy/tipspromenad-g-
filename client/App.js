@@ -33,13 +33,12 @@ export default class App extends React.Component {
   };
 
   setDistance = distance => {
-    this.setState({ distance });
-    _.throttle(this.persistDistance, 1000);
+    this.setState({ distance }, _.throttle(this.persistDistance, 1000));
   };
 
   persistDistance = () => {
     try {
-      AsyncStorage.setItem("distance", this.state.distance);
+      AsyncStorage.setItem("distance", this.state.distance + "");
     } catch (err) {
       console.error("Could not store distance in persistance storage.", err);
     }
@@ -50,11 +49,13 @@ export default class App extends React.Component {
       const distance = await AsyncStorage.getItem("distance");
       if (distance !== null) {
         this.setState({
-          distance
+          distance: parseInt(distance, 10)
         });
+      } else {
+        console.log("No previous distance. Starting from 0");
       }
     } catch (err) {
-      console.log("No previous distance. Starting from 0");
+      console.error("Couldn't load persisted distance", err);
     }
   };
 
