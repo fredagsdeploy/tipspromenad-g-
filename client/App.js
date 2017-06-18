@@ -41,7 +41,7 @@ export default class App extends React.Component {
     try {
       AsyncStorage.setItem("distance", this.state.distance + "");
     } catch (err) {
-      console.error("Could not store distance in persistance storage.", err);
+      console.log("Could not store distance in persistance storage.", err);
     }
   };
 
@@ -56,7 +56,7 @@ export default class App extends React.Component {
         console.log("No previous distance. Starting from 0");
       }
     } catch (err) {
-      console.error("Couldn't load persisted distance", err);
+      console.log("Couldn't load persisted distance", err);
     }
   };
 
