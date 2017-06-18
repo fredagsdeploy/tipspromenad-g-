@@ -28,17 +28,24 @@ export default class App extends React.Component {
   };
 
   persistDistance = () => {
-    AsyncStorage.setItem("distance", this.state.distance);
+    try {
+      AsyncStorage.setItem("distance", this.state.distance);
+    } catch (err) {
+      console.error("Could not store distance in persistance storage.", err);
+    }
   };
 
-  loadPersistDistance = () => {
-    return AsyncStorage.getItem("distance", distance => {
+  loadPersistDistance = async () => {
+    try {
+      const distance = await AsyncStorage.getItem("distance");
       if (distance !== null) {
         this.setState({
           distance
         });
       }
-    });
+    } catch (err) {
+      console.log("No previous distance. Starting from 0");
+    }
   };
 
   setUser = user => this.setState({ user });

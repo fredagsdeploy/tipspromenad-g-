@@ -17,7 +17,7 @@ export default class QuestionList extends React.Component {
     tabBarLabel: "Upplåsta",
     tabBarIcon: ({ tintColor }) =>
       <Image
-        source={require("./list.png")}
+        source={require("./res/list.png")}
         style={[styles.icon, { tintColor: tintColor }]}
       />
   };

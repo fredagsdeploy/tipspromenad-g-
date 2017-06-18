@@ -28,12 +28,12 @@ export default class Question extends React.PureComponent {
 
     return (
       <View style={styles.container}>
-        <View style={styles.row}>
-          <Image source={require("./quest.png")} style={styles.icon} />
-          <TouchableOpacity onPress={onPressHeader}>
+        <TouchableOpacity onPress={onPressHeader}>
+          <View style={styles.row}>
+            <Image source={require("./res/quest.png")} style={styles.icon} />
             <Text style={styles.header}>{question.question}</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
         {open &&
           <View style={styles.alternatives}>
             {question.alternatives.map((alt, i) =>

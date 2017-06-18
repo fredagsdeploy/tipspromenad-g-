@@ -18,7 +18,7 @@ export default class DistanceView extends React.Component {
     tabBarLabel: "Sträcka",
     tabBarIcon: ({ tintColor }) =>
       <Image
-        source={require("./distance.png")}
+        source={require("./res/distance.png")}
         style={[styles.icon, { tintColor: tintColor }]}
       />
   };
