@@ -6,6 +6,8 @@ import { fetchJson, fetchMe, postJson } from "./fetch";
 import Routes from "./Routes";
 import Register from "./Register";
 
+import _ from "lodash";
+
 export default class App extends React.Component {
   state = {
     user: null,
@@ -22,6 +24,21 @@ export default class App extends React.Component {
 
   setDistance = distance => {
     this.setState({ distance });
+    _.throttle(this.persistDistance, 1000);
+  };
+
+  persistDistance = () => {
+    AsyncStorage.setItem("distance", this.state.distance);
+  };
+
+  loadPersistDistance = () => {
+    return AsyncStorage.getItem("distance", distance => {
+      if (distance !== null) {
+        this.setState({
+          distance
+        });
+      }
+    });
   };
 
   setUser = user => this.setState({ user });
@@ -56,6 +73,7 @@ export default class App extends React.Component {
 
   async componentWillMount() {
     const user = await this.getUser();
+    this.loadPersistDistance();
     if (user) {
       this.setState({
         user
