@@ -22,19 +22,9 @@ export default class QuestionList extends React.Component {
       />
   };
 
-  getUnlockedCount = () => Math.floor(this.props.screenProps.distance / 50);
-
   state = {
-    openKey: null,
-    unlockCount: this.getUnlockedCount()
+    openKey: null
   };
-
-  // componentWillUpdate(nextProps, nextState) {
-  //   console.log("Component will update, new distance", nextProps.screenProps.distance);
-  //   this.setState({
-  //     unlockCount: this.getUnlockedCount()
-  //   });
-  // }
 
   setOpen = key => {
     this.setState({ openKey: key });
@@ -42,7 +32,8 @@ export default class QuestionList extends React.Component {
 
   render() {
     const { questions, loading } = this.props.screenProps;
-    const { openKey, unlockCount } = this.state;
+    const { openKey } = this.state;
+    const unlockCount = Math.floor(this.props.screenProps.distance / 50);
 
     if (loading) {
       return (
