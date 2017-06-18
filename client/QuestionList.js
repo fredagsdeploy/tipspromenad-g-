@@ -47,16 +47,15 @@ export default class QuestionList extends React.Component {
 
     return (
       <ScrollView style={styles.container}>
-        {questions
-          .slice(0, unlockCount)
-          .map(q =>
-            <Question
-              onPressHeader={() => this.setOpen(q.id)}
-              open={q.id === openKey}
-              key={q.id}
-              question={q}
-            />
-          )}
+        {questions.map((q, i) =>
+          <Question
+            onPressHeader={() => this.setOpen(q.id)}
+            open={q.id === openKey}
+            unlocked={i < unlockCount}
+            key={q.id}
+            question={q}
+          />
+        )}
       </ScrollView>
     );
   }

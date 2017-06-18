@@ -14,7 +14,18 @@ const PREFIX = ["1", "X", "2"];
 
 export default class Question extends React.PureComponent {
   render() {
-    const { open, question, onPressHeader } = this.props;
+    const { open, question, unlocked, onPressHeader } = this.props;
+
+    if (!unlocked) {
+      return (
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <Text style={styles.header}>Låst</Text>
+          </View>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
         <View style={styles.row}>
