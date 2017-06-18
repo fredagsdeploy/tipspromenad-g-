@@ -35,3 +35,15 @@ export const postJson = (url, data, userId) =>
   })
     .then(checkStatus)
     .then(resp => resp.json());
+
+export const patchJson = (url, data, userId) =>
+  myfetch(url, {
+    method: "PATCH",
+    headers: {
+      "content-type": "application/json",
+      Authorization: userId
+    },
+    body: JSON.stringify(data)
+  })
+    .then(checkStatus)
+    .then(resp => resp.json());

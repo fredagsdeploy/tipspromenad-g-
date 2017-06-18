@@ -117,6 +117,7 @@ app.get("/questions", (req, res) => {
 });
 
 app.post("/questions", (req, res) => {
+  console.log("Posting question: ");
   let body = req.body;
   let user = getUserFromReq(req);
   console.log("questions", user, body);
@@ -133,6 +134,36 @@ app.post("/questions", (req, res) => {
     state.questions[id] = body;
 
     saveState(state, function(err) {
+      if (err) {
+        res.status(404).send("Question not saved");
+        return;
+      }
+
+      res.json({ msg: "Question saved" });
+    });
+  } else {
+    res.status(400).json({ msg: "Invalid question format" });
+  }
+});
+
+app.patch("/questions", (req, res) => {
+  console.log("Patching question: ");
+  let body = req.body;
+  let user = getUserFromReq(req);
+  if (
+    user &&
+    body.question &&
+    body.alternatives.length === 3 &&
+    body.alternatives.every(x => x !== "") &&
+    body.correctAlternative !== null &&
+    0 <= body.correctAlternative &&
+    body.correctAlternative <= 2
+  ) {
+    id = body.id;
+    console.log(state.questions[id]);
+    state.questions[id] = body;
+
+    saveState(state, err => {
       if (err) {
         res.status(404).send("Question not saved");
         return;

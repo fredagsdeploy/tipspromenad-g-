@@ -58,7 +58,20 @@ export default class AddQuestion extends React.Component {
     },
 
     error: null,
-    editQuestionId: null
+    editMode: false
+  };
+
+  setDefaultState = () => {
+    this.setState({
+      newQuestion: {
+        question: "",
+        alternatives: ["", "", ""],
+        correctAlternative: null
+      },
+
+      error: null,
+      editMode: false
+    });
   };
 
   addAlternative = () =>
@@ -70,24 +83,17 @@ export default class AddQuestion extends React.Component {
     }));
 
   submitQuestion = () => {
+    const { editMode } = this.state;
+    const { submitQuestion, updateQuestion } = this.props.screenProps;
+
     const state = this.state.newQuestion;
-    this.props.screenProps
-      .submitQuestion(state)
-      .then(() => {
-        this.setState({
-          newQuestion: {
-            question: "",
-            alternatives: ["", "", ""],
-            correctAlternative: null
-          },
-          error: null
-        });
-      })
-      .catch(({ msg }) => {
-        this.setState({
-          error: msg
-        });
+    let questionFunction = editMode ? updateQuestion : submitQuestion;
+
+    questionFunction(state).then(this.setDefaultState).catch(({ msg }) => {
+      this.setState({
+        error: msg
       });
+    });
   };
 
   onChange = question =>
@@ -112,8 +118,11 @@ export default class AddQuestion extends React.Component {
       }
     }));
 
-  onQuestionPress = () => {
-    console.log("question pressed");
+  onQuestionPress = q => {
+    this.setState({
+      newQuestion: q,
+      editMode: true
+    });
   };
 
   onPressCheck = index => {
@@ -130,7 +139,8 @@ export default class AddQuestion extends React.Component {
   render() {
     const {
       newQuestion: { question, alternatives, correctAlternative },
-      error
+      error,
+      editMode
     } = this.state;
     const { questions, userId } = this.props.screenProps;
     return (
@@ -161,7 +171,11 @@ export default class AddQuestion extends React.Component {
               />
             )}
           </View>
-          <Button onPress={this.submitQuestion}>Skapa fråga</Button>
+          <Button onPress={this.submitQuestion}>
+            {editMode ? "Uppdatera fråga" : "Skapa fråga"}
+          </Button>
+          {editMode &&
+            <Button onPress={() => this.setDefaultState()}>Låt vara</Button>}
           {error && <Text style={styles.error}>{error}</Text>}
         </Center>
 

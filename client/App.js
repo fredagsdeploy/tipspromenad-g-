@@ -2,7 +2,7 @@ import React from "react";
 import { AsyncStorage, StyleSheet, Text, TextInput, View } from "react-native";
 import { Constants } from "expo";
 
-import { fetchJson, fetchMe, postJson } from "./fetch";
+import { fetchJson, patchJson, fetchMe, postJson } from "./fetch";
 import Routes from "./Routes";
 import Register from "./Register";
 
@@ -20,6 +20,12 @@ export default class App extends React.Component {
 
   submitQuestion = data => {
     return postJson("/questions", data, Constants.deviceId).then(() => {
+      this.fetchQuestions();
+    });
+  };
+
+  updateQuestion = data => {
+    return patchJson("/questions", data, Constants.deviceId).then(() => {
       this.fetchQuestions();
     });
   };
@@ -120,6 +126,7 @@ export default class App extends React.Component {
           <Routes
             screenProps={{
               submitQuestion: this.submitQuestion,
+              updateQuestion: this.updateQuestion,
               loading,
               answers,
               questions,
