@@ -31,7 +31,12 @@ export default class DistanceView extends React.Component {
   };
 
   async componentWillMount() {
-    this.soundObject = Audio.Sound.create(require("./res/plopp.mp3"));
+    this.soundObject = new Audio.Sound();
+    try {
+      await this.soundObject.loadAsync(require("./res/plopp.mp3"));
+    } catch (error) {
+      console.log("Could not load sound", error);
+    }
 
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== "granted") {
@@ -106,6 +111,9 @@ export default class DistanceView extends React.Component {
     if (
       nextProps.screenProps.unlockCount !== this.props.screenProps.unlockCount
     ) {
+      this.soundObject
+        .playAsync()
+        .then(() => this.soundObject.setPositionAsync(0));
       Alert.alert(
         "Ny fråga, va!",
         "Du har en ny fråga att svara på, änna",

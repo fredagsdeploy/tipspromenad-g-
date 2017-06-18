@@ -41,7 +41,7 @@ export default class QuestionList extends React.Component {
     } = this.props.screenProps;
     const { openKey } = this.state;
 
-    const getAnswerForQuestionId = qId => answers[qId][userId];
+    const getAnswerForQuestionId = qId => (answers[qId] || {})[userId];
 
     if (loading) {
       return (
