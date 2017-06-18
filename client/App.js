@@ -13,6 +13,7 @@ export default class App extends React.Component {
     user: null,
     loading: false,
     questions: [],
+    answers: {},
     distance: 0
   };
 
@@ -28,7 +29,7 @@ export default class App extends React.Component {
       { id: questionId, answer },
       Constants.deviceId
     ).then(() => {
-      this.fetchQuestions();
+      this.fetchAnswers();
     });
   };
 
@@ -64,10 +65,20 @@ export default class App extends React.Component {
   fetchQuestions = async () => {
     try {
       const questions = await fetchJson("/questions");
-      console.log("questions", questions);
       this.setState({
         loading: false,
         questions
+      });
+    } catch (err) {
+      console.log("err", JSON.stringify(err));
+    }
+  };
+
+  fetchAnswers = async () => {
+    try {
+      const answers = await fetchJson("/answers");
+      this.setState({
+        answers
       });
     } catch (err) {
       console.log("err", JSON.stringify(err));
@@ -81,6 +92,7 @@ export default class App extends React.Component {
       loading: true
     });
     this.fetchQuestions();
+    this.fetchAnswers();
     try {
       const user = await this.getUser();
       this.loadPersistDistance();
@@ -95,7 +107,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { user, questions, loading, distance } = this.state;
+    const { user, questions, answers, loading, distance } = this.state;
     if (!user) {
       return <Register style={styles.container} setUser={this.setUser} />;
     } else {
@@ -105,8 +117,10 @@ export default class App extends React.Component {
             screenProps={{
               submitQuestion: this.submitQuestion,
               loading,
+              answers,
               questions,
               distance,
+              userId: user.nick,
               setDistance: this.setDistance,
               submitAnswer: this.submitAnswer
             }}

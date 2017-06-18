@@ -17,10 +17,10 @@ export default class Question extends React.PureComponent {
     const {
       open,
       question,
+      userAnswer,
       unlocked,
       onPressHeader,
-      submitAnswer,
-      answers
+      submitAnswer
     } = this.props;
 
     if (!unlocked) {
@@ -50,10 +50,13 @@ export default class Question extends React.PureComponent {
                 onPress={() => submitAnswer(question.id, alt)}
               >
                 <View style={styles.alternativeBox}>
-                  <Image
-                    style={[styles.prefix, styles.icon, styles.selectedPrefix]}
-                    source={require("./res/check.png")}
-                  />
+                  <View style={styles.placeholder}>
+                    {alt === userAnswer &&
+                      <Image
+                        style={[styles.icon, styles.selectedPrefix]}
+                        source={require("./res/check.png")}
+                      />}
+                  </View>
                   <Text style={styles.prefix}>
                     {PREFIX[i % PREFIX.length]}
                   </Text>
@@ -94,6 +97,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 5
+  },
+  placeholder: {
+    width: 26
   },
   prefix: {
     fontSize: 18,

@@ -31,11 +31,19 @@ export default class QuestionList extends React.Component {
   };
 
   render() {
-    const { questions, loading, submitAnswer } = this.props.screenProps;
+    const {
+      questions,
+      loading,
+      userId,
+      answers,
+      submitAnswer
+    } = this.props.screenProps;
     const { openKey } = this.state;
     const unlockCount = Math.floor(
       this.props.screenProps.distance / unlockDistanceInterval
     );
+
+    const getAnswerForQuestionId = qId => answers[qId][userId];
 
     if (loading) {
       return (
@@ -51,6 +59,7 @@ export default class QuestionList extends React.Component {
           <Question
             onPressHeader={() => this.setOpen(q.id)}
             open={q.id === openKey}
+            userAnswer={getAnswerForQuestionId(q.id)}
             unlocked={i < unlockCount}
             key={q.id}
             question={q}
