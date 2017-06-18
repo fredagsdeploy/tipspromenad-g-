@@ -12,6 +12,8 @@ import { Constants, Location, Permissions, Audio } from "expo";
 
 import { distanceUpdateInterval } from "./config";
 
+import _ from "lodash";
+
 import Question from "./Question";
 
 export default class DistanceView extends React.Component {
@@ -46,7 +48,7 @@ export default class DistanceView extends React.Component {
     });
 
     try {
-      await Promise.all(sounds);
+      this.sounds = await Promise.all(sounds);
     } catch (error) {
       console.log("Could not load sound", error);
     }
