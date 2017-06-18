@@ -10,7 +10,7 @@ import {
 
 import Question from "./Question";
 
-import { primaryColor } from "./config";
+import { primaryColor, unlockDistanceInterval } from "./config";
 
 export default class QuestionList extends React.Component {
   static navigationOptions = {
@@ -33,7 +33,9 @@ export default class QuestionList extends React.Component {
   render() {
     const { questions, loading } = this.props.screenProps;
     const { openKey } = this.state;
-    const unlockCount = Math.floor(this.props.screenProps.distance / 50);
+    const unlockCount = Math.floor(
+      this.props.screenProps.distance / unlockDistanceInterval
+    );
 
     if (loading) {
       return (

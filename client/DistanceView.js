@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet, Text, Image, FlatList, View } from "react-native";
 import { Constants, Location, Permissions } from "expo";
 
+import { distanceUpdateInterval } from "./config";
+
 import Question from "./Question";
 
 export default class DistanceView extends React.Component {
@@ -29,7 +31,7 @@ export default class DistanceView extends React.Component {
     }
 
     Location.watchPositionAsync(
-      { enableHighAccuracy: true, distanceInterval: 1 },
+      { enableHighAccuracy: true, distanceInterval: distanceUpdateInterval },
       this.positionUpdate
     );
   }
