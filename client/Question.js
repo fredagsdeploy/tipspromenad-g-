@@ -20,6 +20,7 @@ export default class Question extends React.PureComponent {
       return (
         <View style={styles.container}>
           <View style={styles.row}>
+            <Image source={require("./res/lock.png")} style={styles.icon} />
             <Text style={styles.header}>Låst</Text>
           </View>
         </View>
