@@ -6,17 +6,46 @@ import { fetchJson, fetchMe, postJson } from "./fetch";
 import Routes from "./Routes";
 import Register from "./Register";
 
+import _ from "lodash";
+
 export default class App extends React.Component {
   state = {
     user: null,
     loading: false,
-    questions: []
+    questions: [],
+    distance: 0
   };
 
   submitQuestion = data => {
     return postJson("/questions", data, Constants.deviceId).then(() => {
       this.fetchQuestions();
     });
+  };
+
+  setDistance = distance => {
+    this.setState({ distance });
+    _.throttle(this.persistDistance, 1000);
+  };
+
+  persistDistance = () => {
+    try {
+      AsyncStorage.setItem("distance", this.state.distance);
+    } catch (err) {
+      console.error("Could not store distance in persistance storage.", err);
+    }
+  };
+
+  loadPersistDistance = async () => {
+    try {
+      const distance = await AsyncStorage.getItem("distance");
+      if (distance !== null) {
+        this.setState({
+          distance
+        });
+      }
+    } catch (err) {
+      console.log("No previous distance. Starting from 0");
+    }
   };
 
   setUser = user => this.setState({ user });
@@ -51,6 +80,7 @@ export default class App extends React.Component {
 
   async componentWillMount() {
     const user = await this.getUser();
+    this.loadPersistDistance();
     if (user) {
       this.setState({
         user
@@ -60,7 +90,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { user, questions, loading } = this.state;
+    const { user, questions, loading, distance } = this.state;
     if (!user) {
       return <Register style={styles.container} setUser={this.setUser} />;
     } else {
@@ -70,7 +100,9 @@ export default class App extends React.Component {
             screenProps={{
               submitQuestion: this.submitQuestion,
               loading,
-              questions
+              questions,
+              distance,
+              setDistance: this.setDistance
             }}
           />
         </View>

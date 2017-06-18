@@ -14,15 +14,27 @@ const PREFIX = ["1", "X", "2"];
 
 export default class Question extends React.PureComponent {
   render() {
-    const { open, question, onPressHeader } = this.props;
+    const { open, question, unlocked, onPressHeader } = this.props;
+
+    if (!unlocked) {
+      return (
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <Image source={require("./res/lock.png")} style={styles.icon} />
+            <Text style={styles.header}>Låst</Text>
+          </View>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
-        <View style={styles.row}>
-          <Image source={require("./quest.png")} style={styles.icon} />
-          <TouchableOpacity onPress={onPressHeader}>
+        <TouchableOpacity onPress={onPressHeader}>
+          <View style={styles.row}>
+            <Image source={require("./res/quest.png")} style={styles.icon} />
             <Text style={styles.header}>{question.question}</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
         {open &&
           <View style={styles.alternatives}>
             {question.alternatives.map((alt, i) =>

@@ -19,7 +19,7 @@ export default class AddQuestion extends React.Component {
     tabBarLabel: "Ny",
     tabBarIcon: ({ tintColor }) =>
       <Image
-        source={require("./plus.png")}
+        source={require("./res/plus.png")}
         style={[styles.icon, { tintColor: tintColor }]}
       />
   };

@@ -1,6 +1,15 @@
 import React from "react";
-import { StyleSheet, Text, Image, FlatList, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  View
+} from "react-native";
 import { Constants, Location, Permissions } from "expo";
+
+import { distanceUpdateInterval } from "./config";
 
 import Question from "./Question";
 
@@ -9,13 +18,12 @@ export default class DistanceView extends React.Component {
     tabBarLabel: "Sträcka",
     tabBarIcon: ({ tintColor }) =>
       <Image
-        source={require("./distance.png")}
+        source={require("./res/distance.png")}
         style={[styles.icon, { tintColor: tintColor }]}
       />
   };
 
   state = {
-    distance: 0,
     latitude: 0,
     longitude: 0,
     altitude: 0
@@ -30,10 +38,16 @@ export default class DistanceView extends React.Component {
     }
 
     Location.watchPositionAsync(
-      { enableHighAccuracy: true, distanceInterval: 50 },
+      { enableHighAccuracy: true, distanceInterval: distanceUpdateInterval },
       this.positionUpdate
     );
   }
+
+  REMOVEINPROD_increaseDistance = () => {
+    const { setDistance, distance } = this.props.screenProps;
+
+    setDistance(distance + 10);
+  };
 
   measure = (lat1, lon1, lat2, lon2) => {
     // generally used geo measurement function
@@ -75,10 +89,10 @@ export default class DistanceView extends React.Component {
         longitude
       );
 
-      console.log(`I moved ${distance}m`);
-
+      this.props.screenProps.setDistance(
+        Math.round(this.props.screenProps.distance + distance)
+      );
       return {
-        distance: Math.round(state.distance + distance),
         latitude,
         longitude,
         altitude
@@ -87,11 +101,13 @@ export default class DistanceView extends React.Component {
   };
 
   render() {
-    const { distance } = this.state;
+    const { distance } = this.props.screenProps;
 
     return (
       <View style={styles.container}>
-        <Text style={styles.distanceDisplay}>{distance}m</Text>
+        <TouchableOpacity onPress={this.REMOVEINPROD_increaseDistance}>
+          <Text style={styles.distanceDisplay}>{distance}m</Text>
+        </TouchableOpacity>
       </View>
     );
   }
