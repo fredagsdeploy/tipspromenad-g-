@@ -11,7 +11,7 @@ export default class App extends React.Component {
     user: null,
     loading: false,
     questions: [],
-    distance: 99
+    distance: 0
   };
 
   submitQuestion = data => {

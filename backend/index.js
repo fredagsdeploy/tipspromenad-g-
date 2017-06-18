@@ -53,10 +53,8 @@ app.post("/answers", (req, res) => {
 });
 
 app.get("/me", (req, res) => {
-  console.log("Getting me");
   const user = getUserFromReq(req);
   if (user) {
-    console.log("Found: ", user);
     res.json(user);
   } else {
     res.status(401);

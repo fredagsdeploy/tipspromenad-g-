@@ -44,7 +44,7 @@ export default class QuestionList extends React.Component {
         </View>
       );
     }
-    console.log("unlockedCount: ", unlockCount);
+
     return (
       <ScrollView style={styles.container}>
         {questions
