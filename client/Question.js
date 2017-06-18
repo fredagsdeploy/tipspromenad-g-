@@ -14,7 +14,13 @@ const PREFIX = ["1", "X", "2"];
 
 export default class Question extends React.PureComponent {
   render() {
-    const { open, question, unlocked, onPressHeader } = this.props;
+    const {
+      open,
+      question,
+      unlocked,
+      onPressHeader,
+      submitAnswer
+    } = this.props;
 
     if (!unlocked) {
       return (
@@ -38,7 +44,10 @@ export default class Question extends React.PureComponent {
         {open &&
           <View style={styles.alternatives}>
             {question.alternatives.map((alt, i) =>
-              <TouchableOpacity key={alt}>
+              <TouchableOpacity
+                key={alt}
+                onPress={() => submitAnswer(question.id, alt)}
+              >
                 <View style={styles.alternativeBox}>
                   <Text style={styles.prefix}>
                     {PREFIX[i % PREFIX.length]}

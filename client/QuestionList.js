@@ -31,7 +31,7 @@ export default class QuestionList extends React.Component {
   };
 
   render() {
-    const { questions, loading } = this.props.screenProps;
+    const { questions, loading, submitAnswer } = this.props.screenProps;
     const { openKey } = this.state;
     const unlockCount = Math.floor(
       this.props.screenProps.distance / unlockDistanceInterval
@@ -54,6 +54,7 @@ export default class QuestionList extends React.Component {
             unlocked={i < unlockCount}
             key={q.id}
             question={q}
+            submitAnswer={submitAnswer}
           />
         )}
       </ScrollView>

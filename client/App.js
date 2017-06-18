@@ -22,6 +22,16 @@ export default class App extends React.Component {
     });
   };
 
+  submitAnswer = (questionId, answer) => {
+    return postJson(
+      "/answers",
+      { id: questionId, answer },
+      Constants.deviceId
+    ).then(() => {
+      this.fetchQuestions();
+    });
+  };
+
   setDistance = distance => {
     this.setState({ distance });
     _.throttle(this.persistDistance, 1000);
@@ -102,7 +112,8 @@ export default class App extends React.Component {
               loading,
               questions,
               distance,
-              setDistance: this.setDistance
+              setDistance: this.setDistance,
+              submitAnswer: this.submitAnswer
             }}
           />
         </View>

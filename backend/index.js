@@ -36,7 +36,7 @@ app.post("/answers", (req, res) => {
 
   if (user && questionId && state.questions[questionId] && body.answer) {
     question = state.answers[questionId] || {};
-    question[userId] = body.answer;
+    question[user.id] = body.answer;
 
     state.answers[questionId] = question;
 
