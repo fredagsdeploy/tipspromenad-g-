@@ -3,6 +3,7 @@ import { TabNavigator } from "react-navigation";
 import QuestionList from "./QuestionList";
 import AddQuestion from "./AddQuestion";
 import DistanceView from "./DistanceView";
+import ResultsView from "./ResultsView";
 
 import { primaryColor } from "./config";
 
@@ -16,6 +17,9 @@ const Routes = TabNavigator(
     },
     AddOwn: {
       screen: AddQuestion
+    },
+    Result: {
+      screen: ResultsView
     }
   },
   {
