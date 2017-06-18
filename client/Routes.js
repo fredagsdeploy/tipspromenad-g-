@@ -20,7 +20,14 @@ const Routes = TabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: primaryColor
+      activeTintColor: primaryColor,
+      showIcon: true,
+      indicatorStyle: {
+        height: 0
+      },
+      style: {
+        backgroundColor: "lightgray"
+      }
     }
   }
 );
