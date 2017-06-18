@@ -54,7 +54,9 @@ app.post("/answers", (req, res) => {
 
 app.get("/me", (req, res) => {
   const user = getUserFromReq(req);
+  console.log("Trying to login", user, req.get("Authorization"));
   if (user) {
+    console.log("Success");
     res.json(user);
   } else {
     res.status(401);

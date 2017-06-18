@@ -36,12 +36,10 @@ export default class QuestionList extends React.Component {
       loading,
       userId,
       answers,
-      submitAnswer
+      submitAnswer,
+      unlockCount
     } = this.props.screenProps;
     const { openKey } = this.state;
-    const unlockCount = Math.floor(
-      this.props.screenProps.distance / unlockDistanceInterval
-    );
 
     const getAnswerForQuestionId = qId => answers[qId][userId];
 

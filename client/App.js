@@ -6,6 +6,7 @@ import { fetchJson, fetchMe, postJson } from "./fetch";
 import Routes from "./Routes";
 import Register from "./Register";
 
+import { unlockDistanceInterval } from "./config";
 import _ from "lodash";
 
 export default class App extends React.Component {
@@ -93,9 +94,11 @@ export default class App extends React.Component {
     });
     this.fetchQuestions();
     this.fetchAnswers();
+    this.loadPersistDistance();
+
     try {
       const user = await this.getUser();
-      this.loadPersistDistance();
+      console.log("GetUser resp", user);
       if (user) {
         this.setState({
           user
@@ -108,6 +111,7 @@ export default class App extends React.Component {
 
   render() {
     const { user, questions, answers, loading, distance } = this.state;
+    console.log("user in render", user);
     if (!user) {
       return <Register style={styles.container} setUser={this.setUser} />;
     } else {
@@ -122,7 +126,11 @@ export default class App extends React.Component {
               distance,
               userId: user.nick,
               setDistance: this.setDistance,
-              submitAnswer: this.submitAnswer
+              submitAnswer: this.submitAnswer,
+              unlockCount: Math.min(
+                Math.floor(distance / unlockDistanceInterval),
+                questions.length
+              )
             }}
           />
         </View>

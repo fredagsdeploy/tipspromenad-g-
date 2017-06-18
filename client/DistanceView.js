@@ -5,7 +5,8 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  View
+  View,
+  Alert
 } from "react-native";
 import { Constants, Location, Permissions, Audio } from "expo";
 
@@ -79,21 +80,20 @@ export default class DistanceView extends React.Component {
           altitude
         };
       }
+      const { distance } = this.props.screenProps;
 
       const latDiff = state.latitude - latitude;
       const lonDiff = state.longitude - longitude;
       const altDiff = state.altitude - altitude;
 
-      const distance = this.measure(
+      const newDistance = this.measure(
         state.latitude,
         state.longitude,
         latitude,
         longitude
       );
 
-      this.props.screenProps.setDistance(
-        Math.round(this.props.screenProps.distance + distance)
-      );
+      this.props.screenProps.setDistance(Math.round(distance + newDistance));
       return {
         latitude,
         longitude,
@@ -101,6 +101,28 @@ export default class DistanceView extends React.Component {
       };
     });
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.screenProps.unlockCount !== this.props.screenProps.unlockCount
+    ) {
+      Alert.alert(
+        "Ny fråga, va!",
+        "Du har en ny fråga att svara på, änna",
+        [
+          {
+            text: "Jajjamen vettu",
+            onPress: () => this.props.navigation.navigate("Home")
+          },
+          {
+            text: "Nahh, tarn senare",
+            style: "cancel"
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+  }
 
   render() {
     const { distance } = this.props.screenProps;
