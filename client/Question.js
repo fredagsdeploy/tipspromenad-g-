@@ -27,14 +27,19 @@ export default class Question extends React.PureComponent {
       );
     }
 
+    const header = (
+      <View style={styles.row}>
+        <Image source={require("./res/quest.png")} style={styles.icon} />
+        <Text style={styles.header}>{question.question}</Text>
+      </View>
+    );
+
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={onPressHeader}>
-          <View style={styles.row}>
-            <Image source={require("./res/quest.png")} style={styles.icon} />
-            <Text style={styles.header}>{question.question}</Text>
-          </View>
-        </TouchableOpacity>
+        {(open && header) ||
+          <TouchableOpacity onPress={onPressHeader}>
+            {header}
+          </TouchableOpacity>}
         {open &&
           <View style={styles.alternatives}>
             {question.alternatives.map((alt, i) =>
