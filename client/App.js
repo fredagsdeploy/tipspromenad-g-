@@ -52,6 +52,12 @@ export default class App extends React.Component {
     }
   };
 
+  clearDistance = () => {
+    this.setState({
+      distance: 0
+    });
+  };
+
   loadPersistDistance = async () => {
     try {
       const distance = await AsyncStorage.getItem("distance");
@@ -112,6 +118,7 @@ export default class App extends React.Component {
       }
     } catch (e) {
       console.log("could not load user", e);
+      this.clearDistance();
     }
   }
 
