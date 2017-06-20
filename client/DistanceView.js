@@ -160,7 +160,7 @@ export default class DistanceView extends React.Component {
             style={{ value: spring(distance) }}
           >
             {({ value }) =>
-              <Text style={styles.distanceDisplay}>{value}m</Text>}
+              <Text style={styles.distanceDisplay}>{Math.ceil(value)}m</Text>}
           </Motion>
         </TouchableOpacity>
       </View>
