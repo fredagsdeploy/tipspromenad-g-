@@ -31,10 +31,7 @@ export default class ResultView extends React.Component {
     }
 
     const addPointToUser = (acc, userId) => {
-      if (!(userId in acc)) {
-        acc[userId] = 0;
-      }
-      acc[userId] += 1;
+      return { ...acc, [userId]: (acc[userId] || 0) + 1 };
     };
 
     const isCorrectAnswer = (question, userAnswer) => {
@@ -42,7 +39,7 @@ export default class ResultView extends React.Component {
     };
 
     return _.chain(questions)
-      .reduce((acc, question, questionId) => {
+      .reduce((acc, question) => {
         const currentQuestionUserAnswers = answers[question.id];
         if (
           question.correctAlternative === null ||
@@ -52,32 +49,38 @@ export default class ResultView extends React.Component {
           return acc;
         }
 
-        for (let userId in currentQuestionUserAnswers) {
-          if (isCorrectAnswer(question, currentQuestionUserAnswers[userId])) {
-            addPointToUser(acc, userId);
-          }
-        }
-        return acc;
+        // Give points to users for the current question if answered correctly
+        return _.reduce(
+          currentQuestionUserAnswers,
+          (acc, answer, userId) => {
+            if (isCorrectAnswer(question, answer)) {
+              return addPointToUser(acc, userId);
+            }
+            return acc;
+          },
+          acc
+        );
       }, {})
       .toPairs()
-      .sortBy(pair => pair[1])
+      .map(([nick, points]) => ({ nick, points }))
+      .orderBy(["points"], ["desc"])
       .value();
   };
 
   render() {
     const { questions, answers } = this.props.screenProps;
     const leaderBoard = this.generateLeaderboard(questions, answers);
-
+    console.log(leaderBoard);
     return (
       <ScrollView style={styles.container}>
         <Center>
           <Text style={styles.header}>Vem var gôrbra?</Text>
           <View style={styles.scoreTableContainer}>
-            {leaderBoard.map((item, index) => {
+            {leaderBoard.map(({ nick, points }) => {
               return (
-                <View style={styles.scoreTableRow} key={index}>
-                  <Text style={styles.scoreTableNameCell}>{item[0]}</Text>
-                  <Text style={styles.scoreTablePointsCell}>{item[1]}</Text>
+                <View style={styles.scoreTableRow} key={nick}>
+                  <Text style={styles.scoreTablePointsCell}>{points}</Text>
+                  <Text style={styles.scoreTableNameCell}>{nick}</Text>
                 </View>
               );
             })}
@@ -125,10 +128,10 @@ const styles = StyleSheet.create({
   },
   scoreTableNameCell: {
     fontSize: 26,
-    marginRight: 10
+    marginLeft: 10
   },
   scoreTablePointsCell: {
     fontSize: 26,
-    marginLeft: 10
+    marginRight: 10
   }
 });
