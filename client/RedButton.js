@@ -1,7 +1,13 @@
 import React from "react";
 import styled from "styled-components/native";
+import { Platform } from "react-native";
 
 import { lustColor } from "./config";
+
+const buttonFont = Platform.select({
+  ios: "'Avenir-Heavy'",
+  android: "'Roboto'"
+});
 
 const Btn = styled.TouchableOpacity`
   background-color: ${lustColor}
@@ -11,6 +17,7 @@ const Btn = styled.TouchableOpacity`
 
 const Text = styled.Text`
   color: white
+  font-family: ${buttonFont}
 `;
 
 export default ({ children, ...props }) =>
