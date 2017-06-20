@@ -1,18 +1,19 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
   TextInput,
+  RefreshControl,
   Image,
   View,
   ScrollView
 } from "react-native";
-import Button from "./Button";
+
+import TPText from "./TPText";
+import QuestionResult from "./QuestionResult.js";
+
+import _ from "lodash";
 
 const Center = props => <View {...props} style={{ alignItems: "center" }} />;
-
-const Alternative = ({ onChange, value }) =>
-  <TextInput style={styles.textInput} value={value} onChangeText={onChange} />;
 
 export default class ResultView extends React.Component {
   static navigationOptions = {
@@ -24,16 +25,95 @@ export default class ResultView extends React.Component {
       />
   };
 
-  state = {};
+  state = { openKey: null };
+
+  generateLeaderboard = (questions, answers) => {
+    if (!answers) {
+      return [];
+    }
+
+    const addPointToUser = (acc, userId) => {
+      return { ...acc, [userId]: (acc[userId] || 0) + 1 };
+    };
+
+    const isCorrectAnswer = (question, userAnswer) => {
+      return question.alternatives[question.correctAlternative] === userAnswer;
+    };
+
+    return _.chain(questions)
+      .reduce((acc, question) => {
+        const currentQuestionUserAnswers = answers[question.id];
+        if (
+          question.correctAlternative === null ||
+          !currentQuestionUserAnswers
+        ) {
+          // Question cannot be processed. No correct alternative set or no one has answered it yet.
+          return acc;
+        }
+
+        // Give points to users for the current question if answered correctly
+        return _.reduce(
+          currentQuestionUserAnswers,
+          (acc, answer, userId) => {
+            if (isCorrectAnswer(question, answer)) {
+              return addPointToUser(acc, userId);
+            }
+            return acc;
+          },
+          acc
+        );
+      }, {})
+      .toPairs()
+      .map(([nick, points]) => ({ nick, points }))
+      .orderBy(["points"], ["desc"])
+      .value();
+  };
+
+  onPressQuestionResultHeader = questionId => {
+    console.log("Press header", questionId);
+    this.setState({
+      openKey: questionId
+    });
+  };
 
   render() {
-    const { questions, answers } = this.props;
-
+    const { questions, answers, loading, refreshData } = this.props.screenProps;
+    const { openKey } = this.state;
+    const leaderBoard = this.generateLeaderboard(questions, answers);
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={refreshData} />
+        }
+      >
         <Center>
-          <Text style={styles.header}>Vem var görbra?</Text>
+          <TPText style={styles.header}>Vem var gôrbra?</TPText>
+          <View style={styles.scoreTableContainer}>
+            {leaderBoard.map(({ nick, points }) => {
+              return (
+                <View style={styles.scoreTableRow} key={nick}>
+                  <TPText style={styles.scoreTablePointsCell}>{points}</TPText>
+                  <TPText style={styles.scoreTableNameCell}>{nick}</TPText>
+                </View>
+              );
+            })}
+          </View>
 
+          <TPText style={styles.header}>Resultat per fråga</TPText>
+          <View style={styles.scoreTableContainer}>
+            {questions.map((q, index) => {
+              return (
+                <QuestionResult
+                  key={q.id}
+                  question={q}
+                  open={q.id === openKey}
+                  onPressHeader={this.onPressQuestionResultHeader}
+                  userAnswers={answers[q.id]}
+                />
+              );
+            })}
+          </View>
         </Center>
       </ScrollView>
     );
@@ -67,5 +147,19 @@ const styles = StyleSheet.create({
   error: {
     marginTop: 10,
     color: "tomato"
+  },
+  scoreTableContainer: {
+    flex: 1
+  },
+  scoreTableRow: {
+    flexDirection: "row"
+  },
+  scoreTableNameCell: {
+    fontSize: 26,
+    marginLeft: 10
+  },
+  scoreTablePointsCell: {
+    fontSize: 26,
+    marginRight: 10
   }
 });

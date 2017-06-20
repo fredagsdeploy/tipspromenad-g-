@@ -1,18 +1,44 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
   TextInput,
   Image,
   View,
-  ScrollView
+  ScrollView,
+  TouchableOpacity
 } from "react-native";
-import Button from "./Button";
+import RedButton from "./RedButton";
+import TPText from "./TPText";
+import { primaryColor, selectColor } from "./config";
 
 const Center = props => <View {...props} style={{ alignItems: "center" }} />;
 
-const Alternative = ({ onChange, value }) =>
-  <TextInput style={styles.textInput} value={value} onChangeText={onChange} />;
+const Alternative = ({ onPressCheck, isChecked, onChange, value }) => {
+  let checkStyle = [styles.icon];
+  if (isChecked) {
+    checkStyle.push({ tintColor: selectColor });
+  }
+  return (
+    <View style={(styles.textInput, styles.alternativeRow)}>
+      <TextInput
+        style={styles.textInput}
+        value={value}
+        onChangeText={onChange}
+      />
+      <TouchableOpacity onPress={() => onPressCheck()}>
+        <Image style={checkStyle} source={require("./res/check.png")} />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const QuestionItem = ({ value }) =>
+  <View style={styles.questionItem}>
+    <Image style={styles.icon} source={require("./res/edit.png")} />
+    <TPText>
+      {" "}{value.question}{" "}
+    </TPText>
+  </View>;
 
 export default class AddQuestion extends React.Component {
   static navigationOptions = {
@@ -27,9 +53,25 @@ export default class AddQuestion extends React.Component {
   state = {
     newQuestion: {
       question: "",
-      alternatives: ["", "", ""]
+      alternatives: ["", "", ""],
+      correctAlternative: null
     },
-    error: null
+    posting: false,
+    error: null,
+    editMode: false
+  };
+
+  setDefaultState = () => {
+    this.setState({
+      newQuestion: {
+        question: "",
+        alternatives: ["", "", ""],
+        correctAlternative: null
+      },
+      posting: false,
+      error: null,
+      editMode: false
+    });
   };
 
   addAlternative = () =>
@@ -41,23 +83,25 @@ export default class AddQuestion extends React.Component {
     }));
 
   submitQuestion = () => {
+    const { editMode, posting } = this.state;
+    const { submitQuestion, updateQuestion } = this.props.screenProps;
+
+    if (posting) {
+      return;
+    }
+
+    this.setState({
+      posting: true
+    });
+
     const state = this.state.newQuestion;
-    this.props.screenProps
-      .submitQuestion(state)
-      .then(() => {
-        this.setState({
-          newQuestion: {
-            question: "",
-            alternatives: ["", "", ""]
-          },
-          error: null
-        });
-      })
-      .catch(({ msg }) => {
-        this.setState({
-          error: msg
-        });
+    let questionFunction = editMode ? updateQuestion : submitQuestion;
+
+    questionFunction(state).then(this.setDefaultState).catch(({ msg }) => {
+      this.setState({
+        error: msg
       });
+    });
   };
 
   onChange = question =>
@@ -82,12 +126,36 @@ export default class AddQuestion extends React.Component {
       }
     }));
 
+  onQuestionPress = q => {
+    this.setState({
+      newQuestion: q,
+      editMode: true
+    });
+  };
+
+  onPressCheck = index => {
+    this.setState(state => ({
+      newQuestion: {
+        ...state.newQuestion,
+        correctAlternative: index === state.newQuestion.correctAlternative
+          ? null
+          : index
+      }
+    }));
+  };
+
   render() {
-    const { newQuestion: { question, alternatives }, error } = this.state;
+    const {
+      newQuestion: { question, alternatives, correctAlternative },
+      error,
+      posting,
+      editMode
+    } = this.state;
+    const { questions, userId } = this.props.screenProps;
     return (
       <ScrollView style={styles.container}>
         <Center>
-          <Text style={styles.header}>Skriv in en fråga, änna</Text>
+          <TPText style={styles.header}>Skriv in en fråga, änna</TPText>
           <View>
             <TextInput
               style={styles.textInput}
@@ -98,19 +166,44 @@ export default class AddQuestion extends React.Component {
         </Center>
         <Center>
           <View style={{ marginTop: 20 }}>
-            <Text style={styles.header}>Ge tre alternativ, änna</Text>
+            <TPText style={styles.header}>Ge tre alternativ, änna</TPText>
           </View>
-          <View>
+          <View style={styles.alternativesContainer}>
             {alternatives.map((alt, index) =>
               <Alternative
                 value={alt}
                 key={index}
+                alternativeNumber={index}
+                isChecked={index === correctAlternative}
+                onPressCheck={() => this.onPressCheck(index)}
                 onChange={value => this.onChangeAlternative(index, value)}
               />
             )}
           </View>
-          <Button onPress={this.submitQuestion}>Skapa fråga</Button>
-          {error && <Text style={styles.error}>{error}</Text>}
+          <RedButton onPress={this.submitQuestion} disabled={posting}>
+            {editMode ? "Uppdatera fråga" : "Skapa fråga"}
+          </RedButton>
+          {editMode &&
+            <RedButton onPress={() => this.setDefaultState()}>
+              Låt vara
+            </RedButton>}
+          {error && <TPText style={styles.error}>{error}</TPText>}
+        </Center>
+
+        <Center>
+          <View style={{ marginTop: 20 }}>
+            <TPText style={styles.header}>Dina gamla goa frågor</TPText>
+          </View>
+          <View style={styles.questionHistoryContainer}>
+            {questions.filter(q => q.author === userId).map((q, index) =>
+              <TouchableOpacity
+                key={index}
+                onPress={() => this.onQuestionPress(q)}
+              >
+                <QuestionItem value={q} />
+              </TouchableOpacity>
+            )}
+          </View>
         </Center>
       </ScrollView>
     );
@@ -131,7 +224,6 @@ const styles = StyleSheet.create({
     padding: 5
   },
   textInput: {
-    marginTop: 20,
     width: 300,
     height: 30,
     borderWidth: 1,
@@ -139,10 +231,30 @@ const styles = StyleSheet.create({
   },
   icon: {
     width: 26,
-    height: 26
+    height: 26,
+    tintColor: primaryColor
   },
   error: {
     marginTop: 10,
     color: "tomato"
+  },
+  questionHistoryContainer: {
+    flex: 1,
+    marginBottom: 40
+  },
+  questionItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10
+  },
+  placeholder: {
+    width: 26
+  },
+  alternativesContainer: {
+    flex: 1
+  },
+  alternativeRow: {
+    flexDirection: "row",
+    marginTop: 20
   }
 });

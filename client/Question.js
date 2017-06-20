@@ -8,6 +8,8 @@ import {
   View
 } from "react-native";
 
+import TPText from "./TPText";
+
 import { primaryColor, selectColor } from "./config";
 
 const PREFIX = ["1", "X", "2"];
@@ -27,17 +29,38 @@ export default class Question extends React.PureComponent {
       return (
         <View style={styles.container}>
           <View style={styles.row}>
-            <Image source={require("./res/lock.png")} style={styles.icon} />
-            <Text style={styles.header}>Låst</Text>
+            <Image
+              source={{ uri: "https://didit.rocks/res/lock.png" }}
+              style={styles.icon}
+            />
+            <TPText style={styles.header}>Låst</TPText>
           </View>
         </View>
       );
     }
 
+    const getHeaderImage = hasAnswer => {
+      if (hasAnswer) {
+        return (
+          <Image
+            source={{ uri: "https://didit.rocks/res/check.png" }}
+            style={[styles.icon, { tintColor: selectColor }]}
+          />
+        );
+      } else {
+        return (
+          <Image
+            source={{ uri: "https://didit.rocks/res/quest.png" }}
+            style={styles.icon}
+          />
+        );
+      }
+    };
+
     const header = (
       <View style={styles.row}>
-        <Image source={require("./res/quest.png")} style={styles.icon} />
-        <Text style={styles.header}>{question.question}</Text>
+        {getHeaderImage(userAnswer)}
+        <TPText style={styles.header}>{question.question}</TPText>
       </View>
     );
 
@@ -51,7 +74,7 @@ export default class Question extends React.PureComponent {
           <View style={styles.alternatives}>
             {question.alternatives.map((alt, i) =>
               <TouchableOpacity
-                key={alt}
+                key={i}
                 onPress={() => submitAnswer(question.id, alt)}
               >
                 <View style={styles.alternativeBox}>
@@ -59,13 +82,13 @@ export default class Question extends React.PureComponent {
                     {alt === userAnswer &&
                       <Image
                         style={[styles.icon, styles.selectedPrefix]}
-                        source={require("./res/check.png")}
+                        source={{ uri: "https://didit.rocks/res/check.png" }}
                       />}
                   </View>
-                  <Text style={styles.prefix}>
+                  <TPText style={styles.prefix}>
                     {PREFIX[i % PREFIX.length]}
-                  </Text>
-                  <Text style={styles.alternativeText}>{alt}</Text>
+                  </TPText>
+                  <TPText style={styles.alternativeText}>{alt}</TPText>
                 </View>
               </TouchableOpacity>
             )}
@@ -78,7 +101,7 @@ export default class Question extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginLeft: 20,
+    marginHorizontal: 20,
     justifyContent: "center"
   },
   row: {
