@@ -56,7 +56,7 @@ export default class AddQuestion extends React.Component {
       alternatives: ["", "", ""],
       correctAlternative: null
     },
-
+    posting: false,
     error: null,
     editMode: false
   };
@@ -68,7 +68,7 @@ export default class AddQuestion extends React.Component {
         alternatives: ["", "", ""],
         correctAlternative: null
       },
-
+      posting: false,
       error: null,
       editMode: false
     });
@@ -83,8 +83,16 @@ export default class AddQuestion extends React.Component {
     }));
 
   submitQuestion = () => {
-    const { editMode } = this.state;
+    const { editMode, posting } = this.state;
     const { submitQuestion, updateQuestion } = this.props.screenProps;
+
+    if (posting) {
+      return;
+    }
+
+    this.setState({
+      posting: true
+    });
 
     const state = this.state.newQuestion;
     let questionFunction = editMode ? updateQuestion : submitQuestion;
@@ -140,6 +148,7 @@ export default class AddQuestion extends React.Component {
     const {
       newQuestion: { question, alternatives, correctAlternative },
       error,
+      posting,
       editMode
     } = this.state;
     const { questions, userId } = this.props.screenProps;
@@ -171,7 +180,7 @@ export default class AddQuestion extends React.Component {
               />
             )}
           </View>
-          <Button onPress={this.submitQuestion}>
+          <Button onPress={this.submitQuestion} disabled={posting}>
             {editMode ? "Uppdatera fråga" : "Skapa fråga"}
           </Button>
           {editMode &&
