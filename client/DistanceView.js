@@ -9,6 +9,7 @@ import {
   Alert
 } from "react-native";
 import { Constants, Location, Permissions, Audio } from "expo";
+import { Motion, spring } from "react-motion";
 
 import { distanceUpdateInterval } from "./config";
 
@@ -154,7 +155,13 @@ export default class DistanceView extends React.Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={this.REMOVEINPROD_increaseDistance}>
-          <Text style={styles.distanceDisplay}>{distance}m</Text>
+          <Motion
+            defaultStyle={{ value: 0 }}
+            style={{ value: spring(distance) }}
+          >
+            {({ value }) =>
+              <Text style={styles.distanceDisplay}>{value}m</Text>}
+          </Motion>
         </TouchableOpacity>
       </View>
     );
