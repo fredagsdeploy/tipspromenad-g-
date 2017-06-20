@@ -1,7 +1,6 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
   Image,
   FlatList,
   TouchableOpacity,
@@ -15,6 +14,7 @@ import { distanceUpdateInterval } from "./config";
 
 import _ from "lodash";
 
+import TPText from "./TPText";
 import Question from "./Question";
 
 export default class DistanceView extends React.Component {
@@ -160,7 +160,9 @@ export default class DistanceView extends React.Component {
             style={{ value: spring(distance) }}
           >
             {({ value }) =>
-              <Text style={styles.distanceDisplay}>{Math.ceil(value)}m</Text>}
+              <TPText style={styles.distanceDisplay}>
+                {Math.ceil(value)}m
+              </TPText>}
           </Motion>
         </TouchableOpacity>
       </View>

@@ -1,13 +1,14 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
   TextInput,
   RefreshControl,
   Image,
   View,
   ScrollView
 } from "react-native";
+
+import TPText from "./TPText";
 
 import _ from "lodash";
 
@@ -78,13 +79,13 @@ export default class ResultView extends React.Component {
         }
       >
         <Center>
-          <Text style={styles.header}>Vem var gôrbra?</Text>
+          <TPText style={styles.header}>Vem var gôrbra?</TPText>
           <View style={styles.scoreTableContainer}>
             {leaderBoard.map(({ nick, points }) => {
               return (
                 <View style={styles.scoreTableRow} key={nick}>
-                  <Text style={styles.scoreTablePointsCell}>{points}</Text>
-                  <Text style={styles.scoreTableNameCell}>{nick}</Text>
+                  <TPText style={styles.scoreTablePointsCell}>{points}</TPText>
+                  <TPText style={styles.scoreTableNameCell}>{nick}</TPText>
                 </View>
               );
             })}

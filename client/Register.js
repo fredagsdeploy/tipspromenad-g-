@@ -1,7 +1,6 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
   TouchableOpacity,
   TextInput,
   View,
@@ -11,6 +10,7 @@ import { Constants } from "expo";
 
 import { postJson } from "./fetch";
 import RedButton from "./RedButton";
+import TPText from "./TPText";
 
 const Center = props => <View {...props} style={{ alignItems: "center" }} />;
 
@@ -44,8 +44,8 @@ export default class Register extends React.Component {
     return (
       <View style={[style, styles.container]}>
         <Center>
-          <Text style={styles.header}>Skriv in nick, änna</Text>
-          {error && <Text style={styles.error}>{error}</Text>}
+          <TPText style={styles.header}>Skriv in nick, änna</TPText>
+          {error && <TPText style={styles.error}>{error}</TPText>}
 
           <TextInput
             style={styles.textInput}

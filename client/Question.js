@@ -8,6 +8,8 @@ import {
   View
 } from "react-native";
 
+import TPText from "./TPText";
+
 import { primaryColor, selectColor } from "./config";
 
 const PREFIX = ["1", "X", "2"];
@@ -31,7 +33,7 @@ export default class Question extends React.PureComponent {
               source={{ uri: "https://didit.rocks/res/lock.png" }}
               style={styles.icon}
             />
-            <Text style={styles.header}>Låst</Text>
+            <TPText style={styles.header}>Låst</TPText>
           </View>
         </View>
       );
@@ -58,7 +60,7 @@ export default class Question extends React.PureComponent {
     const header = (
       <View style={styles.row}>
         {getHeaderImage(userAnswer)}
-        <Text style={styles.header}>{question.question}</Text>
+        <TPText style={styles.header}>{question.question}</TPText>
       </View>
     );
 
@@ -83,10 +85,10 @@ export default class Question extends React.PureComponent {
                         source={{ uri: "https://didit.rocks/res/check.png" }}
                       />}
                   </View>
-                  <Text style={styles.prefix}>
+                  <TPText style={styles.prefix}>
                     {PREFIX[i % PREFIX.length]}
-                  </Text>
-                  <Text style={styles.alternativeText}>{alt}</Text>
+                  </TPText>
+                  <TPText style={styles.alternativeText}>{alt}</TPText>
                 </View>
               </TouchableOpacity>
             )}

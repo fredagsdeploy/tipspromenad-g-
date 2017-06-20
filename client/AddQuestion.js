@@ -1,7 +1,6 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
   TextInput,
   Image,
   View,
@@ -9,6 +8,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import RedButton from "./RedButton";
+import TPText from "./TPText";
 import { primaryColor, selectColor } from "./config";
 
 const Center = props => <View {...props} style={{ alignItems: "center" }} />;
@@ -35,9 +35,9 @@ const Alternative = ({ onPressCheck, isChecked, onChange, value }) => {
 const QuestionItem = ({ value }) =>
   <View style={styles.questionItem}>
     <Image style={styles.icon} source={require("./res/edit.png")} />
-    <Text>
+    <TPText>
       {" "}{value.question}{" "}
-    </Text>
+    </TPText>
   </View>;
 
 export default class AddQuestion extends React.Component {
@@ -155,7 +155,7 @@ export default class AddQuestion extends React.Component {
     return (
       <ScrollView style={styles.container}>
         <Center>
-          <Text style={styles.header}>Skriv in en fråga, änna</Text>
+          <TPText style={styles.header}>Skriv in en fråga, änna</TPText>
           <View>
             <TextInput
               style={styles.textInput}
@@ -166,7 +166,7 @@ export default class AddQuestion extends React.Component {
         </Center>
         <Center>
           <View style={{ marginTop: 20 }}>
-            <Text style={styles.header}>Ge tre alternativ, änna</Text>
+            <TPText style={styles.header}>Ge tre alternativ, änna</TPText>
           </View>
           <View style={styles.alternativesContainer}>
             {alternatives.map((alt, index) =>
@@ -187,12 +187,12 @@ export default class AddQuestion extends React.Component {
             <RedButton onPress={() => this.setDefaultState()}>
               Låt vara
             </RedButton>}
-          {error && <Text style={styles.error}>{error}</Text>}
+          {error && <TPText style={styles.error}>{error}</TPText>}
         </Center>
 
         <Center>
           <View style={{ marginTop: 20 }}>
-            <Text style={styles.header}>Dina gamla goa frågor</Text>
+            <TPText style={styles.header}>Dina gamla goa frågor</TPText>
           </View>
           <View style={styles.questionHistoryContainer}>
             {questions.filter(q => q.author === userId).map((q, index) =>
