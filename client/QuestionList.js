@@ -5,14 +5,16 @@ import {
   Image,
   ActivityIndicator,
   View,
-  ScrollView
+  ScrollView,
+  LayoutAnimation,
+  UIManager
 } from "react-native";
 
 import Question from "./Question";
 
 import { primaryColor, unlockDistanceInterval } from "./config";
 
-export default class QuestionList extends React.Component {
+export default class QuestionList extends React.PureComponent {
   static navigationOptions = {
     tabBarLabel: "Upplåsta",
     tabBarIcon: ({ tintColor }) =>
@@ -23,27 +25,43 @@ export default class QuestionList extends React.Component {
   };
 
   state = {
-    openKey: null
+    openKey: null,
+    imagesLoaded: false
   };
 
+  componentDidMount() {
+    Promise.all([
+      Image.prefetch("https://didit.rocks/res/check.png"),
+      Image.prefetch("https://didit.rocks/res/quest.png"),
+      Image.prefetch("https://didit.rocks/res/lock.png")
+    ]).then(() => {
+      this.setState({
+        imagesLoaded: true
+      });
+    });
+    UIManager.setLayoutAnimationEnabledExperimental &&
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+
   setOpen = key => {
+    LayoutAnimation.easeInEaseOut();
     this.setState({ openKey: key });
   };
 
   render() {
     const {
       questions,
-      loading,
+      loading: loadingQuestions,
       userId,
       answers,
       submitAnswer,
       unlockCount
     } = this.props.screenProps;
-    const { openKey } = this.state;
+    const { openKey, imagesLoaded } = this.state;
 
     const getAnswerForQuestionId = qId => (answers[qId] || {})[userId];
 
-    if (loading) {
+    if (loadingQuestions || !imagesLoaded) {
       return (
         <View style={styles.container}>
           <ActivityIndicator size="large" />

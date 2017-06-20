@@ -27,7 +27,10 @@ export default class Question extends React.PureComponent {
       return (
         <View style={styles.container}>
           <View style={styles.row}>
-            <Image source={require("./res/lock.png")} style={styles.icon} />
+            <Image
+              source={{ uri: "https://didit.rocks/res/lock.png" }}
+              style={styles.icon}
+            />
             <Text style={styles.header}>Låst</Text>
           </View>
         </View>
@@ -38,13 +41,16 @@ export default class Question extends React.PureComponent {
       if (hasAnswer) {
         return (
           <Image
-            source={require("./res/check.png")}
+            source={{ uri: "https://didit.rocks/res/check.png" }}
             style={[styles.icon, { tintColor: selectColor }]}
           />
         );
       } else {
         return (
-          <Image source={require("./res/quest.png")} style={styles.icon} />
+          <Image
+            source={{ uri: "https://didit.rocks/res/quest.png" }}
+            style={styles.icon}
+          />
         );
       }
     };
@@ -74,7 +80,7 @@ export default class Question extends React.PureComponent {
                     {alt === userAnswer &&
                       <Image
                         style={[styles.icon, styles.selectedPrefix]}
-                        source={require("./res/check.png")}
+                        source={{ uri: "https://didit.rocks/res/check.png" }}
                       />}
                   </View>
                   <Text style={styles.prefix}>
