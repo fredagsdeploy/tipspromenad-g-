@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   Image,
+  RefreshControl,
   ActivityIndicator,
   View,
   ScrollView,
@@ -52,6 +53,7 @@ export default class QuestionList extends React.PureComponent {
     const {
       questions,
       loading: loadingQuestions,
+      fetchQuestions,
       userId,
       answers,
       submitAnswer,
@@ -61,7 +63,7 @@ export default class QuestionList extends React.PureComponent {
 
     const getAnswerForQuestionId = qId => (answers[qId] || {})[userId];
 
-    if (loadingQuestions || !imagesLoaded) {
+    if (!imagesLoaded) {
       return (
         <View style={styles.container}>
           <ActivityIndicator size="large" />
@@ -70,7 +72,15 @@ export default class QuestionList extends React.PureComponent {
     }
 
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={loadingQuestions}
+            onRefresh={fetchQuestions}
+          />
+        }
+      >
         {questions.map((q, i) =>
           <Question
             onPressHeader={() => this.setOpen(q.id)}

@@ -126,6 +126,7 @@ export default class App extends React.Component {
           <Routes
             screenProps={{
               submitQuestion: this.submitQuestion,
+              fetchQuestions: this.fetchQuestions,
               updateQuestion: this.updateQuestion,
               loading,
               answers,
