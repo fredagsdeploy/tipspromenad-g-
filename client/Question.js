@@ -34,9 +34,24 @@ export default class Question extends React.PureComponent {
       );
     }
 
+    const getHeaderImage = hasAnswer => {
+      if (hasAnswer) {
+        return (
+          <Image
+            source={require("./res/check.png")}
+            style={[styles.icon, { tintColor: selectColor }]}
+          />
+        );
+      } else {
+        return (
+          <Image source={require("./res/quest.png")} style={styles.icon} />
+        );
+      }
+    };
+
     const header = (
       <View style={styles.row}>
-        <Image source={require("./res/quest.png")} style={styles.icon} />
+        {getHeaderImage(userAnswer)}
         <Text style={styles.header}>{question.question}</Text>
       </View>
     );
