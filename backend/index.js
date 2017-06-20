@@ -7,7 +7,24 @@ const _ = require("lodash");
 
 app.use(bodyParser.json());
 
-let state = JSON.parse(fs.readFileSync("./state.json", "utf8"));
+let state = null;
+try {
+  const fileContent = fs.readFileSync("./state.json", "utf8");
+  state = JSON.parse(fileContent);
+} catch (err) {
+  if (err.code === "ENOENT") {
+    //File does not exists
+    console.log("File ./state.json does not exist. Creating it...");
+    let fd = fs.openSync("./state.json", "a+", 0600);
+    state = {}
+    saveState(state, (err) => {
+      if (err !== null) {
+        console.log("Could not save state to file. Exiting");
+        return;
+      }
+    })
+  }
+}
 
 if (!state.questions) {
   state.questions = {};
