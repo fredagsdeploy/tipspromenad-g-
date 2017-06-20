@@ -10,7 +10,7 @@ import {
 import { Constants } from "expo";
 
 import { postJson } from "./fetch";
-import Button from "./Button";
+import RedButton from "./RedButton";
 
 const Center = props => <View {...props} style={{ alignItems: "center" }} />;
 
@@ -52,9 +52,9 @@ export default class Register extends React.Component {
             onChangeText={this.onChange}
             value={nick}
           />
-          <Button onPress={this.createUser}>
+          <RedButton onPress={this.createUser}>
             Skapa användare
-          </Button>
+          </RedButton>
         </Center>
       </View>
     );

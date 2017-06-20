@@ -8,7 +8,6 @@ import {
   View,
   ScrollView
 } from "react-native";
-import Button from "./Button";
 
 import _ from "lodash";
 

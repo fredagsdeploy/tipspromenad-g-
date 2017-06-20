@@ -8,7 +8,7 @@ import {
   ScrollView,
   TouchableOpacity
 } from "react-native";
-import Button from "./Button";
+import RedButton from "./RedButton";
 import { primaryColor, selectColor } from "./config";
 
 const Center = props => <View {...props} style={{ alignItems: "center" }} />;
@@ -180,11 +180,13 @@ export default class AddQuestion extends React.Component {
               />
             )}
           </View>
-          <Button onPress={this.submitQuestion} disabled={posting}>
+          <RedButton onPress={this.submitQuestion} disabled={posting}>
             {editMode ? "Uppdatera fråga" : "Skapa fråga"}
-          </Button>
+          </RedButton>
           {editMode &&
-            <Button onPress={() => this.setDefaultState()}>Låt vara</Button>}
+            <RedButton onPress={() => this.setDefaultState()}>
+              Låt vara
+            </RedButton>}
           {error && <Text style={styles.error}>{error}</Text>}
         </Center>
 
