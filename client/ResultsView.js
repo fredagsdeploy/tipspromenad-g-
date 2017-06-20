@@ -71,7 +71,7 @@ export default class ResultView extends React.Component {
     return (
       <ScrollView style={styles.container}>
         <Center>
-          <Text style={styles.header}>Vem var görbra?</Text>
+          <Text style={styles.header}>Vem var gôrbra?</Text>
           <View style={styles.scoreTableContainer}>
             {leaderBoard.map((item, index) => {
               return (
