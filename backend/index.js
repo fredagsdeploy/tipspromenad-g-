@@ -154,10 +154,7 @@ app.patch("/questions", (req, res) => {
     user &&
     body.question &&
     body.alternatives.length === 3 &&
-    body.alternatives.every(x => x !== "") &&
-    body.correctAlternative !== null &&
-    0 <= body.correctAlternative &&
-    body.correctAlternative <= 2
+    body.alternatives.every(x => x !== "")
   ) {
     id = body.id;
     console.log(state.questions[id]);
