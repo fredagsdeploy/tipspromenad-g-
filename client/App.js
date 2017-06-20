@@ -12,7 +12,8 @@ import _ from "lodash";
 export default class App extends React.Component {
   state = {
     user: null,
-    loading: false,
+    loadingQuestions: false,
+    loadingAnswers: false,
     questions: [],
     answers: {},
     distance: 0
@@ -38,6 +39,11 @@ export default class App extends React.Component {
     ).then(() => {
       this.fetchAnswers();
     });
+  };
+
+  refreshData = () => {
+    this.fetchQuestions();
+    this.fetchAnswers();
   };
 
   setDistance = distance => {
@@ -76,10 +82,13 @@ export default class App extends React.Component {
   setUser = user => this.setState({ user });
 
   fetchQuestions = async () => {
+    this.setState({
+      loadingQuestions: true
+    });
     try {
       const questions = await fetchJson("/questions");
       this.setState({
-        loading: false,
+        loadingQuestions: false,
         questions
       });
     } catch (err) {
@@ -88,9 +97,13 @@ export default class App extends React.Component {
   };
 
   fetchAnswers = async () => {
+    this.setState({
+      loadingAnswers: true
+    });
     try {
       const answers = await fetchJson("/answers");
       this.setState({
+        loadingAnswers: false,
         answers
       });
     } catch (err) {
@@ -101,16 +114,12 @@ export default class App extends React.Component {
   getUser = () => fetchMe(Constants.deviceId);
 
   async componentWillMount() {
-    this.setState({
-      loading: true
-    });
     this.fetchQuestions();
     this.fetchAnswers();
     this.loadPersistDistance();
 
     try {
       const user = await this.getUser();
-      console.log("GetUser resp", user);
       if (user) {
         this.setState({
           user
@@ -123,8 +132,14 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { user, questions, answers, loading, distance } = this.state;
-    console.log("user in render", user);
+    const {
+      user,
+      questions,
+      answers,
+      loadingQuestions,
+      loadingAnswers,
+      distance
+    } = this.state;
     if (!user) {
       return <Register style={styles.container} setUser={this.setUser} />;
     } else {
@@ -133,9 +148,9 @@ export default class App extends React.Component {
           <Routes
             screenProps={{
               submitQuestion: this.submitQuestion,
-              fetchQuestions: this.fetchQuestions,
+              refreshData: this.refreshData,
               updateQuestion: this.updateQuestion,
-              loading,
+              loading: loadingQuestions || loadingAnswers,
               answers,
               questions,
               distance,

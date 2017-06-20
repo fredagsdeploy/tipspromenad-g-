@@ -70,7 +70,6 @@ export default class ResultView extends React.Component {
   render() {
     const { questions, answers } = this.props.screenProps;
     const leaderBoard = this.generateLeaderboard(questions, answers);
-    console.log(leaderBoard);
     return (
       <ScrollView style={styles.container}>
         <Center>

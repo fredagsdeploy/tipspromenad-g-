@@ -53,7 +53,7 @@ export default class QuestionList extends React.PureComponent {
     const {
       questions,
       loading: loadingQuestions,
-      fetchQuestions,
+      refreshData,
       userId,
       answers,
       submitAnswer,
@@ -77,7 +77,7 @@ export default class QuestionList extends React.PureComponent {
         refreshControl={
           <RefreshControl
             refreshing={loadingQuestions}
-            onRefresh={fetchQuestions}
+            onRefresh={refreshData}
           />
         }
       >
