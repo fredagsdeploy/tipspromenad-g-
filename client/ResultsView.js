@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  RefreshControl,
   Image,
   View,
   ScrollView
@@ -68,10 +69,15 @@ export default class ResultView extends React.Component {
   };
 
   render() {
-    const { questions, answers } = this.props.screenProps;
+    const { questions, answers, loading, refreshData } = this.props.screenProps;
     const leaderBoard = this.generateLeaderboard(questions, answers);
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={refreshData} />
+        }
+      >
         <Center>
           <Text style={styles.header}>Vem var gôrbra?</Text>
           <View style={styles.scoreTableContainer}>
