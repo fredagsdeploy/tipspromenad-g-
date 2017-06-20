@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import TPText from "./TPText";
+import QuestionResult from "./QuestionResult.js";
 
 import _ from "lodash";
 
@@ -24,7 +25,7 @@ export default class ResultView extends React.Component {
       />
   };
 
-  state = {};
+  state = { openKey: null };
 
   generateLeaderboard = (questions, answers) => {
     if (!answers) {
@@ -68,8 +69,16 @@ export default class ResultView extends React.Component {
       .value();
   };
 
+  onPressQuestionResultHeader = questionId => {
+    console.log("Press header", questionId);
+    this.setState({
+      openKey: questionId
+    });
+  };
+
   render() {
     const { questions, answers, loading, refreshData } = this.props.screenProps;
+    const { openKey } = this.state;
     const leaderBoard = this.generateLeaderboard(questions, answers);
     return (
       <ScrollView
@@ -91,6 +100,20 @@ export default class ResultView extends React.Component {
             })}
           </View>
 
+          <TPText style={styles.header}>Resultat per fråga</TPText>
+          <View style={styles.scoreTableContainer}>
+            {questions.map((q, index) => {
+              return (
+                <QuestionResult
+                  key={q.id}
+                  question={q}
+                  open={q.id === openKey}
+                  onPressHeader={this.onPressQuestionResultHeader}
+                  userAnswers={answers[q.id]}
+                />
+              );
+            })}
+          </View>
         </Center>
       </ScrollView>
     );

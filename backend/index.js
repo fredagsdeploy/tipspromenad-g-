@@ -113,6 +113,7 @@ app.get("/users", (req, res) => {
 });
 
 app.get("/questions", (req, res) => {
+  console.log("Someone is fetching questions");
   res.json(Object.values(state.questions));
 });
 

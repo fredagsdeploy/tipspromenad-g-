@@ -11,9 +11,13 @@ import {
   UIManager
 } from "react-native";
 
+import _ from "lodash";
+
 import Question from "./Question";
 
 import { primaryColor, unlockDistanceInterval } from "./config";
+
+const Center = props => <View {...props} style={{ alignItems: "center" }} />;
 
 export default class QuestionList extends React.PureComponent {
   static navigationOptions = {
@@ -40,8 +44,8 @@ export default class QuestionList extends React.PureComponent {
         imagesLoaded: true
       });
     });
-    UIManager.setLayoutAnimationEnabledExperimental &&
-      UIManager.setLayoutAnimationEnabledExperimental(true);
+    // UIManager.setLayoutAnimationEnabledExperimental &&
+    //   UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 
   setOpen = key => {
@@ -81,6 +85,13 @@ export default class QuestionList extends React.PureComponent {
           />
         }
       >
+        {_.isEmpty(questions) &&
+          <View style={styles.container}>
+            <Center>
+              <Text> Gå hem de ä fan tomt. </Text>
+            </Center>
+          </View>}
+
         {questions.map((q, i) =>
           <Question
             onPressHeader={() => this.setOpen(q.id)}

@@ -17,7 +17,7 @@ import _ from "lodash";
 import TPText from "./TPText";
 import Question from "./Question";
 
-export default class DistanceView extends React.Component {
+export default class DistanceView extends React.PureComponent {
   static navigationOptions = {
     tabBarLabel: "Sträcka",
     tabBarIcon: ({ tintColor }) =>
