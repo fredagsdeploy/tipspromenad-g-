@@ -72,7 +72,7 @@ export default class Question extends React.PureComponent {
           <View style={styles.alternatives}>
             {question.alternatives.map((alt, i) =>
               <TouchableOpacity
-                key={alt}
+                key={i}
                 onPress={() => submitAnswer(question.id, alt)}
               >
                 <View style={styles.alternativeBox}>
@@ -99,7 +99,7 @@ export default class Question extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginLeft: 20,
+    marginHorizontal: 20,
     justifyContent: "center"
   },
   row: {
