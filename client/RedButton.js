@@ -10,14 +10,14 @@ const buttonFont = Platform.select({
 });
 
 const Btn = styled.TouchableOpacity`
-  background-color: ${lustColor}
-  border-radius: 3px
-  padding: 10px 20px
+  background-color: ${lustColor};
+  border-radius: 3px;
+  padding: 10px 20px;
 `;
 
 const Text = styled.Text`
-  color: white
-  font-family: ${buttonFont}
+  color: white;
+  font-family: ${buttonFont};
 `;
 
 export default ({ children, ...props }) =>
