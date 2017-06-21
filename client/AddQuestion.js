@@ -99,7 +99,8 @@ export default class AddQuestion extends React.Component {
 
     questionFunction(state).then(this.setDefaultState).catch(({ msg }) => {
       this.setState({
-        error: msg
+        error: msg,
+        posting: false
       });
     });
   };
@@ -180,10 +181,15 @@ export default class AddQuestion extends React.Component {
               />
             )}
           </View>
-          <RedButton onPress={this.submitQuestion} disabled={posting}>
+          <RedButton
+            onPress={this.submitQuestion}
+            loading={posting}
+            disabled={posting}
+          >
             {editMode ? "Uppdatera fråga" : "Skapa fråga"}
           </RedButton>
           {editMode &&
+            !posting &&
             <RedButton onPress={() => this.setDefaultState()}>
               Låt vara
             </RedButton>}
