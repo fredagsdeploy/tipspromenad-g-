@@ -15,8 +15,8 @@ try {
   if (err.code === "ENOENT") {
     //File does not exists
     console.log("File ./state.json does not exist. Creating it...");
-    let fd = fs.openSync("./state.json", "a+", 0600);
-    state = {}
+    let fd = fs.openSync("./state.json", "a+", 0o600);
+    state = {};
     saveState(state, (err) => {
       if (err !== null) {
         console.log("Could not save state to file. Exiting");
@@ -101,7 +101,7 @@ app.post("/users", (req, res) => {
       Object.values(state.users).filter(u => u.nick === body.nick).length > 0 &&
       body.id
     ) {
-      res.status(400).json({ msg: "User already exists with that nick" });
+      res.status(400).json({ msg: "Det finns redan en tjomme som nickar så" });
       return;
     } else {
       const id = body.id;
@@ -114,14 +114,14 @@ app.post("/users", (req, res) => {
 
       saveState(state, function(err) {
         if (err) {
-          res.status(404).json({ msg: "User not saved" });
+          res.status(404).json({ msg: "Nu blev det änna fel nånstans" });
           return;
         }
         res.json(user);
       });
     }
   } else {
-    res.status(400).json({ msg: "User must have nick" });
+    res.status(400).json({ msg: "É du go, eller? Du måste la ha ett nick?" });
   }
 });
 
