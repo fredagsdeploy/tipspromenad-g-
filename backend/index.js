@@ -15,14 +15,14 @@ try {
   if (err.code === "ENOENT") {
     //File does not exists
     console.log("File ./state.json does not exist. Creating it...");
-    let fd = fs.openSync("./state.json", "a+", 0o600);
+    let fd = fs.openSync("./state.json", "a+", 384);
     state = {};
-    saveState(state, (err) => {
+    saveState(state, err => {
       if (err !== null) {
         console.log("Could not save state to file. Exiting");
         return;
       }
-    })
+    });
   }
 }
 
@@ -99,16 +99,13 @@ app.post("/users", (req, res) => {
   if (body.nick) {
     if (
       Object.values(state.users).filter(u => u.nick === body.nick).length > 0 &&
-      body.id
+        body.id
     ) {
       res.status(400).json({ msg: "Det finns redan en tjomme som nickar så" });
       return;
     } else {
       const id = body.id;
-      user = {
-        nick: body.nick,
-        id: id
-      };
+      user = { nick: body.nick, id: id };
 
       state.users[id] = user;
 
@@ -141,10 +138,8 @@ app.post("/questions", (req, res) => {
   console.log("questions", user, body);
 
   if (
-    user &&
-    body.question &&
-    body.alternatives.length === 3 &&
-    body.alternatives.every(x => x !== "")
+    user && body.question && body.alternatives.length === 3 &&
+      body.alternatives.every(x => x !== "")
   ) {
     id = uuid.v4();
     body.id = id;
@@ -169,10 +164,8 @@ app.patch("/questions", (req, res) => {
   let body = req.body;
   let user = getUserFromReq(req);
   if (
-    user &&
-    body.question &&
-    body.alternatives.length === 3 &&
-    body.alternatives.every(x => x !== "")
+    user && body.question && body.alternatives.length === 3 &&
+      body.alternatives.every(x => x !== "")
   ) {
     id = body.id;
     console.log(state.questions[id]);
