@@ -1,7 +1,6 @@
 import React from "react";
 import {
   StyleSheet,
-  TextInput,
   Image,
   View,
   ScrollView,
@@ -9,6 +8,7 @@ import {
 } from "react-native";
 import RedButton from "./RedButton";
 import TPText from "./TPText";
+import TPTextInput from "./TPTextInput";
 import { primaryColor, selectColor } from "./config";
 
 const Center = props => <View {...props} style={{ alignItems: "center" }} />;
@@ -20,7 +20,7 @@ const Alternative = ({ onPressCheck, isChecked, onChange, value }) => {
   }
   return (
     <View style={(styles.textInput, styles.alternativeRow)}>
-      <TextInput
+      <TPTextInput
         style={styles.textInput}
         value={value}
         onChangeText={onChange}
@@ -157,7 +157,7 @@ export default class AddQuestion extends React.Component {
         <Center>
           <TPText style={styles.header}>Skriv in en fråga, änna</TPText>
           <View>
-            <TextInput
+            <TPTextInput
               style={styles.textInput}
               value={question}
               onChangeText={this.onChange}
