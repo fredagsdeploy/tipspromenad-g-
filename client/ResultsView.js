@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import TPText from "./TPText";
+import TPHeader from "./TPHeader";
 import QuestionResult from "./QuestionResult.js";
 
 import _ from "lodash";
@@ -87,8 +88,8 @@ export default class ResultView extends React.Component {
           <RefreshControl refreshing={loading} onRefresh={refreshData} />
         }
       >
-        <Center>
-          <TPText style={styles.header}>Vem var gôrbra?</TPText>
+        <View style={{marginLeft: 20}}>
+          <TPHeader>Vem var gôrbra?</TPHeader>
           <View style={styles.scoreTableContainer}>
             {leaderBoard.map(({ nick, points }) => {
               return (
@@ -100,7 +101,7 @@ export default class ResultView extends React.Component {
             })}
           </View>
 
-          <TPText style={styles.header}>Resultat per fråga</TPText>
+          <TPHeader>Resultat per fråga</TPHeader>
           <View style={styles.scoreTableContainer}>
             {questions.map((q, index) => {
               return (
@@ -114,7 +115,7 @@ export default class ResultView extends React.Component {
               );
             })}
           </View>
-        </Center>
+        </View>
       </ScrollView>
     );
   }
@@ -128,10 +129,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 50
-  },
-  header: {
-    fontSize: 20,
-    padding: 5
   },
   textInput: {
     marginTop: 20,
@@ -149,17 +146,19 @@ const styles = StyleSheet.create({
     color: "tomato"
   },
   scoreTableContainer: {
-    flex: 1
+    flex: 1,
+    marginBottom: 20
   },
   scoreTableRow: {
-    flexDirection: "row"
+    flexDirection: "row",
+    marginTop: 10
   },
   scoreTableNameCell: {
-    fontSize: 26,
+    fontSize: 18,
     marginLeft: 10
   },
   scoreTablePointsCell: {
-    fontSize: 26,
+    fontSize: 18,
     marginRight: 10
   }
 });

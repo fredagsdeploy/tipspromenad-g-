@@ -88,7 +88,7 @@ export default class QuestionList extends React.PureComponent {
         {_.isEmpty(questions) &&
           <View style={styles.container}>
             <Center>
-              <Text> Gå hem de ä fan tomt. </Text>
+              <Text> Gå hem, de é fan tomt. </Text>
             </Center>
           </View>}
 
