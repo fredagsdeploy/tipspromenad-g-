@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { ActivityIndicator, Platform } from "react-native";
 
-import { lustColor } from "./config";
+import { primaryColor } from "./config";
 
 const buttonFont = Platform.select({
   ios: "'Avenir-Heavy'",
@@ -10,9 +10,10 @@ const buttonFont = Platform.select({
 });
 
 const Btn = styled.TouchableOpacity`
-  background-color: ${lustColor};
+  background-color: ${primaryColor};
   border-radius: 3px;
   padding: 10px 20px;
+  margin: 5px;
 `;
 
 const Text = styled.Text`

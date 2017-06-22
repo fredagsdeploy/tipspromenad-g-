@@ -10,7 +10,7 @@ import {
 
 import TPText from "./TPText";
 
-import { primaryColor, selectColor } from "./config";
+import { primaryColor, baseTextColor } from "./config";
 
 const PREFIX = ["1", "X", "2"];
 
@@ -43,8 +43,8 @@ export default class Question extends React.PureComponent {
       if (hasAnswer) {
         return (
           <Image
-            source={{ uri: "https://didit.rocks/res/check.png" }}
-            style={[styles.icon, { tintColor: selectColor }]}
+            source={require("./res/cross.png")}
+            style={[styles.icon, { tintColor: baseTextColor }]}
           />
         );
       } else {
@@ -82,7 +82,7 @@ export default class Question extends React.PureComponent {
                     {alt === userAnswer &&
                       <Image
                         style={[styles.icon, styles.selectedPrefix]}
-                        source={{ uri: "https://didit.rocks/res/check.png" }}
+                        source={require("./res/cross.png")}
                       />}
                   </View>
                   <TPText style={styles.prefix}>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     color: primaryColor
   },
   selectedPrefix: {
-    tintColor: selectColor,
+    tintColor: baseTextColor,
     marginRight: 5
   },
   alternativeText: {

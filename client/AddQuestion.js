@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import RedButton from "./RedButton";
 import TPText from "./TPText";
+import TPHeader from "./TPHeader";
 import TPTextInput from "./TPTextInput";
 import { primaryColor, selectColor } from "./config";
 
@@ -35,7 +36,7 @@ const Alternative = ({ onPressCheck, isChecked, onChange, value }) => {
 const QuestionItem = ({ value }) =>
   <View style={styles.questionItem}>
     <Image style={styles.icon} source={require("./res/edit.png")} />
-    <TPText>
+    <TPText style={{marginLeft: 5}}>
       {" "}{value.question}{" "}
     </TPText>
   </View>;
@@ -157,7 +158,7 @@ export default class AddQuestion extends React.Component {
       <ScrollView style={styles.container}>
         <Center>
           <TPText style={styles.header}>Skriv in en fråga, änna</TPText>
-          <View>
+          <View style={{marginTop: 20}}>
             <TPTextInput
               style={styles.textInput}
               value={question}
@@ -167,7 +168,7 @@ export default class AddQuestion extends React.Component {
         </Center>
         <Center>
           <View style={{ marginTop: 20 }}>
-            <TPText style={styles.header}>Ge tre alternativ, änna</TPText>
+            <TPText style={styles.header}>Ge tre alternativ och markera det rätta</TPText>
           </View>
           <View style={styles.alternativesContainer}>
             {alternatives.map((alt, index) =>
@@ -196,21 +197,19 @@ export default class AddQuestion extends React.Component {
           {error && <TPText style={styles.error}>{error}</TPText>}
         </Center>
 
-        <Center>
-          <View style={{ marginTop: 20 }}>
-            <TPText style={styles.header}>Dina gamla goa frågor</TPText>
-          </View>
-          <View style={styles.questionHistoryContainer}>
-            {questions.filter(q => q.author === userId).map((q, index) =>
-              <TouchableOpacity
-                key={index}
-                onPress={() => this.onQuestionPress(q)}
-              >
-                <QuestionItem value={q} />
-              </TouchableOpacity>
-            )}
-          </View>
-        </Center>
+        <View style={{ marginTop: 20, marginLeft: 20, width: "100%" }}>
+          <TPHeader>Dina gamla goa frågor</TPHeader>
+        </View>
+        <View style={styles.questionHistoryContainer}>
+          {questions.filter(q => q.author === userId).map((q, index) =>
+            <TouchableOpacity
+              key={index}
+              onPress={() => this.onQuestionPress(q)}
+            >
+              <QuestionItem value={q} />
+            </TouchableOpacity>
+          )}
+        </View>
       </ScrollView>
     );
   }
@@ -225,15 +224,10 @@ const styles = StyleSheet.create({
   scrollContainer: {
     paddingBottom: 50
   },
-  header: {
-    fontSize: 20,
-    padding: 5
-  },
   textInput: {
     width: 300,
     height: 30,
-    borderWidth: 1,
-    borderColor: "#000"
+    borderWidth: 0
   },
   icon: {
     width: 26,
@@ -246,7 +240,8 @@ const styles = StyleSheet.create({
   },
   questionHistoryContainer: {
     flex: 1,
-    marginBottom: 40
+    marginTop: 10,
+    marginLeft: 20
   },
   questionItem: {
     flexDirection: "row",
@@ -257,7 +252,8 @@ const styles = StyleSheet.create({
     width: 26
   },
   alternativesContainer: {
-    flex: 1
+    flex: 1,
+    marginBottom: 10
   },
   alternativeRow: {
     flexDirection: "row",

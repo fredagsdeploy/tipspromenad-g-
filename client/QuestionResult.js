@@ -65,7 +65,8 @@ export default class QuestionResult extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 20,
+    marginRight: 20,
+    marginTop: 10,
     justifyContent: "center"
   },
   subContainer: {
