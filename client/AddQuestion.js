@@ -153,7 +153,17 @@ export default class AddQuestion extends React.Component {
       posting,
       editMode
     } = this.state;
-    const { questions, userId } = this.props.screenProps;
+    const { questions, appModeDone, userId } = this.props.screenProps;
+
+    if (appModeDone) {
+      return (
+        <Center style={styles.container}>
+          <TPText style={styles.header}>Vi tillåter inte fler frågor.</TPText>
+          <TPText style={styles.header}>De é fan över nu, gå hem</TPText>
+        </Center>
+      );
+    }
+
     return (
       <ScrollView style={styles.container}>
         <Center>
