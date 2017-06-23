@@ -36,7 +36,7 @@ const Alternative = ({ onPressCheck, isChecked, onChange, value }) => {
 const QuestionItem = ({ value }) =>
   <View style={styles.questionItem}>
     <Image style={styles.icon} source={require("./res/edit.png")} />
-    <TPText style={{marginLeft: 5}}>
+    <TPText style={{ marginLeft: 5 }}>
       {" "}{value.question}{" "}
     </TPText>
   </View>;
@@ -158,7 +158,7 @@ export default class AddQuestion extends React.Component {
       <ScrollView style={styles.container}>
         <Center>
           <TPText style={styles.header}>Skriv in en fråga, änna</TPText>
-          <View style={{marginTop: 20}}>
+          <View style={{ marginTop: 20 }}>
             <TPTextInput
               style={styles.textInput}
               value={question}
@@ -168,7 +168,9 @@ export default class AddQuestion extends React.Component {
         </Center>
         <Center>
           <View style={{ marginTop: 20 }}>
-            <TPText style={styles.header}>Ge tre alternativ och markera det rätta</TPText>
+            <TPText style={styles.header}>
+              Ge tre alternativ och markera det rätta
+            </TPText>
           </View>
           <View style={styles.alternativesContainer}>
             {alternatives.map((alt, index) =>
@@ -227,7 +229,7 @@ const styles = StyleSheet.create({
   textInput: {
     width: 300,
     height: 30,
-    borderWidth: 0
+    borderWidth: StyleSheet.hairlineWidth
   },
   icon: {
     width: 26,
