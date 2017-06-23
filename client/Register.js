@@ -43,11 +43,13 @@ export default class Register extends React.Component {
             <Image source={require("./res/logo.png")} style={[styles.logo]} />
             <TPText style={styles.header}>Skriv in nick, änna</TPText>
             {error && <TPText style={styles.error}>{error}</TPText>}
-            <TPTextInput
-              style={styles.textInput}
-              onChangeText={this.onChange}
-              value={nick}
-            />
+            <Center>
+              <TPTextInput
+                style={styles.textInput}
+                onChangeText={this.onChange}
+                value={nick}
+              />
+            </Center>
             <RedButton onPress={this.createUser}>
               Nu kôr vi!
             </RedButton>
@@ -66,9 +68,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#A6D6F0"
   },
-  header: { fontSize: 20, padding: 5 },
+  header: { fontSize: 20, padding: 5, backgroundColor: "transparent" },
   error: { marginVertical: 5, color: "tomato" },
-  textInput: { marginTop: 20, width: 300, height: 30, borderWidth: 0 },
+  textInput: {
+    backgroundColor: "white",
+    marginVertical: 20,
+    width: 300,
+    height: 30,
+    borderWidth: 0
+  },
   logo: { flex: 1, width: 300, height: 300, resizeMode: "contain" },
   image: { flex: 1, width: 420, height: 0, resizeMode: "contain" },
   gradient: { flex: 1, alignItems: "center", justifyContent: "center" }
