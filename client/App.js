@@ -42,6 +42,10 @@ export default class App extends React.Component {
   };
 
   refreshData = () => {
+    this.setState({
+      loadingQuestions: true,
+      loadingAnswers: true
+    });
     this.fetchQuestions();
     this.fetchAnswers();
   };
@@ -82,9 +86,6 @@ export default class App extends React.Component {
   setUser = user => this.setState({ user });
 
   fetchQuestions = async () => {
-    this.setState({
-      loadingQuestions: true
-    });
     try {
       const questions = await fetchJson("/questions");
       this.setState({
@@ -97,9 +98,6 @@ export default class App extends React.Component {
   };
 
   fetchAnswers = async () => {
-    this.setState({
-      loadingAnswers: true
-    });
     try {
       const answers = await fetchJson("/answers");
       this.setState({
@@ -114,8 +112,7 @@ export default class App extends React.Component {
   getUser = () => fetchMe(Constants.deviceId);
 
   async componentWillMount() {
-    this.fetchQuestions();
-    this.fetchAnswers();
+    this.refreshData();
     this.loadPersistDistance();
 
     try {
@@ -126,7 +123,8 @@ export default class App extends React.Component {
         });
       }
     } catch (e) {
-      console.log("could not load user", e);
+      console.log("could not load user");
+      console.log(e);
       this.clearDistance();
     }
   }
