@@ -77,10 +77,59 @@ export default class ResultView extends React.Component {
     });
   };
 
-  render() {
-    const { questions, answers, loading, refreshData } = this.props.screenProps;
+  renderDone = () => {
     const { openKey } = this.state;
+    const { questions, answers } = this.props.screenProps;
     const leaderBoard = this.generateLeaderboard(questions, answers);
+    return (
+      <View style={{ marginLeft: 20 }}>
+        <TPHeader>Vem var gôrbra?</TPHeader>
+        <View style={styles.scoreTableContainer}>
+          {leaderBoard.map(({ nick, points }) => {
+            return (
+              <View style={styles.scoreTableRow} key={nick}>
+                <TPText style={styles.scoreTablePointsCell}>{points}</TPText>
+                <TPText style={styles.scoreTableNameCell}>{nick}</TPText>
+              </View>
+            );
+          })}
+        </View>
+
+        <TPHeader>Resultat per fråga</TPHeader>
+        <View style={styles.scoreTableContainer}>
+          {questions.map((q, index) => {
+            return (
+              <QuestionResult
+                key={q.id}
+                question={q}
+                open={q.id === openKey}
+                onPressHeader={this.onPressQuestionResultHeader}
+                userAnswers={answers[q.id]}
+              />
+            );
+          })}
+        </View>
+      </View>
+    );
+  };
+
+  renderNotDone = () => {
+    return (
+      <View style={{ marginLeft: 20 }}>
+        <TPHeader>Väntar på resultat...</TPHeader>
+      </View>
+    );
+  };
+
+  render() {
+    const {
+      questions,
+      appModeDone,
+      answers,
+      loading,
+      refreshData
+    } = this.props.screenProps;
+
     return (
       <ScrollView
         style={styles.container}
@@ -88,34 +137,7 @@ export default class ResultView extends React.Component {
           <RefreshControl refreshing={loading} onRefresh={refreshData} />
         }
       >
-        <View style={{marginLeft: 20}}>
-          <TPHeader>Vem var gôrbra?</TPHeader>
-          <View style={styles.scoreTableContainer}>
-            {leaderBoard.map(({ nick, points }) => {
-              return (
-                <View style={styles.scoreTableRow} key={nick}>
-                  <TPText style={styles.scoreTablePointsCell}>{points}</TPText>
-                  <TPText style={styles.scoreTableNameCell}>{nick}</TPText>
-                </View>
-              );
-            })}
-          </View>
-
-          <TPHeader>Resultat per fråga</TPHeader>
-          <View style={styles.scoreTableContainer}>
-            {questions.map((q, index) => {
-              return (
-                <QuestionResult
-                  key={q.id}
-                  question={q}
-                  open={q.id === openKey}
-                  onPressHeader={this.onPressQuestionResultHeader}
-                  userAnswers={answers[q.id]}
-                />
-              );
-            })}
-          </View>
-        </View>
+        {appModeDone ? this.renderDone() : this.renderNotDone()}
       </ScrollView>
     );
   }

@@ -14,7 +14,9 @@ export default class App extends React.Component {
     user: null,
     loadingQuestions: false,
     loadingAnswers: false,
+    loadingAppmode: false,
     questions: [],
+    appMode: "NORMAL",
     answers: {},
     distance: 0
   };
@@ -41,11 +43,19 @@ export default class App extends React.Component {
     });
   };
 
+  fetchAppMode = () => {
+    fetchJson("/appmode").then(({ appMode }) => {
+      this.setState({ appMode, loadingAppmode: false });
+    });
+  };
+
   refreshData = () => {
     this.setState({
       loadingQuestions: true,
-      loadingAnswers: true
+      loadingAnswers: true,
+      loadingAppmode: true
     });
+    this.fetchAppMode();
     this.fetchQuestions();
     this.fetchAnswers();
   };
@@ -136,7 +146,9 @@ export default class App extends React.Component {
       answers,
       loadingQuestions,
       loadingAnswers,
-      distance
+      loadingAppmode,
+      distance,
+      appMode
     } = this.state;
     if (!user) {
       return <Register style={styles.container} setUser={this.setUser} />;
@@ -148,10 +160,11 @@ export default class App extends React.Component {
               submitQuestion: this.submitQuestion,
               refreshData: this.refreshData,
               updateQuestion: this.updateQuestion,
-              loading: loadingQuestions || loadingAnswers,
+              loading: loadingQuestions || loadingAnswers || loadingAppmode,
               answers,
               questions,
               distance,
+              appModeDone: appMode === "DONE",
               userId: user.nick,
               setDistance: this.setDistance,
               submitAnswer: this.submitAnswer,
