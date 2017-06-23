@@ -51,6 +51,12 @@ const setAppMode = appMode => {
 };
 
 app.post("/answers", (req, res) => {
+
+  if (state.appMode === APP_MODE_DONE) {
+    res.status(403).json({msg: "App in done mode, cannot post new answers"});
+    return;
+  }
+
   let body = req.body;
   let user = getUserFromReq(req);
   let questionId = body.id;
