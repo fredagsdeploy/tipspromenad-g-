@@ -46,6 +46,10 @@ const getUserFromReq = req => {
   return state.users[req.get("Authorization")];
 };
 
+const setAppMode = appMode => {
+  state.appMode = appMode;
+};
+
 app.post("/answers", (req, res) => {
   let body = req.body;
   let user = getUserFromReq(req);
@@ -67,6 +71,32 @@ app.post("/answers", (req, res) => {
   } else {
     res.status(400).json({ msg: "Invalid request" });
   }
+});
+
+const APP_MODE_NORMAL = "NORMAL";
+const APP_MODE_DONE = "DONE";
+
+app.post('/admin', (req, res) => {
+  //const user = getUserFromReq(req);
+  const body = req.body;
+  console.log(req.body.appMode);
+  if (req.get("Authorization") === "7D33C5433A54") {
+    if (body.appMode === APP_MODE_NORMAL || body.appMode === APP_MODE_DONE) {
+      setAppMode(body.appMode);
+      res.json({msg: "Success"});
+    } else {
+      res.status(400).json({msg: "Bad app mode"});
+    }
+
+  } else {
+    res.status(401).json({msg: "Nu la du näsan i blôt."});
+  }
+
+
+});
+
+app.get("/appmode", (req, res) => {
+  res.json({appMode: state.appMode});
 });
 
 app.get("/me", (req, res) => {
@@ -137,6 +167,11 @@ app.post("/questions", (req, res) => {
   let user = getUserFromReq(req);
   console.log("questions", user, body);
 
+  if (state.appMode === APP_MODE_DONE) {
+    res.status(403).json({msg: "App in done mode, cannot post new questions"});
+    return;
+  }
+
   if (
     user && body.question && body.alternatives.length === 3 &&
       body.alternatives.every(x => x !== "")
@@ -163,6 +198,12 @@ app.patch("/questions", (req, res) => {
   console.log("Patching question: ");
   let body = req.body;
   let user = getUserFromReq(req);
+
+  if (state.appMode === APP_MODE_DONE) {
+    res.status(403).json({msg: "App in done mode, cannot update questions"});
+    return;
+  }
+
   if (
     user && body.question && body.alternatives.length === 3 &&
       body.alternatives.every(x => x !== "")
