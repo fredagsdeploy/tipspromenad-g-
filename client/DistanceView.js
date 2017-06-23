@@ -154,17 +154,12 @@ export default class DistanceView extends React.PureComponent {
 
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.REMOVEINPROD_increaseDistance}>
-          <Motion
-            defaultStyle={{ value: 0 }}
-            style={{ value: spring(distance) }}
-          >
-            {({ value }) =>
-              <TPText style={styles.distanceDisplay}>
-                {Math.ceil(value)}m
-              </TPText>}
-          </Motion>
-        </TouchableOpacity>
+        <Motion defaultStyle={{ value: 0 }} style={{ value: spring(distance) }}>
+          {({ value }) =>
+            <TPText style={styles.distanceDisplay}>
+              {Math.ceil(value)}m
+            </TPText>}
+        </Motion>
       </View>
     );
   }
