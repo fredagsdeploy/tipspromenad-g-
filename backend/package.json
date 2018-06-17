@@ -20,6 +20,7 @@
   "homepage": "https://github.com/cthdidIT/tipspromenad-g-#readme",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
     "express": "^4.15.3",
     "fs": "0.0.1-security",
     "lodash": "^4.17.4",
