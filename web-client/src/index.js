@@ -5,8 +5,8 @@ import registerServiceWorker from "./registerServiceWorker";
 import { injectGlobal } from "styled-components";
 
 injectGlobal`
-    html, body, #root { 
-        height: 100%; 
+    html, body, #root {
+        height: 100%;
     } 
     #root {
         display: flex;

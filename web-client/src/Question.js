@@ -29,10 +29,7 @@ export default class Question extends React.PureComponent {
       return (
         <View style={styles.container}>
           <View style={styles.row}>
-            <Image
-              source={{ uri: "https://didit.rocks/res/lock.png" }}
-              style={styles.icon}
-            />
+            <Image source={require("./res/lock.png")} style={styles.icon} />
             <TPText style={styles.header}>Låst</TPText>
           </View>
         </View>
@@ -49,10 +46,7 @@ export default class Question extends React.PureComponent {
         );
       } else {
         return (
-          <Image
-            source={{ uri: "https://didit.rocks/res/quest.png" }}
-            style={styles.icon}
-          />
+          <Image source={require("./res/quest.png")} style={styles.icon} />
         );
       }
     };
@@ -66,24 +60,24 @@ export default class Question extends React.PureComponent {
 
     return (
       <View style={styles.container}>
-        {(open && header) ||
-          <TouchableOpacity onPress={onPressHeader}>
-            {header}
-          </TouchableOpacity>}
-        {open &&
+        {(open && header) || (
+          <TouchableOpacity onPress={onPressHeader}>{header}</TouchableOpacity>
+        )}
+        {open && (
           <View style={styles.alternatives}>
-            {question.alternatives.map((alt, i) =>
+            {question.alternatives.map((alt, i) => (
               <TouchableOpacity
                 key={i}
                 onPress={() => submitAnswer(question.id, alt)}
               >
                 <View style={styles.alternativeBox}>
                   <View style={styles.placeholder}>
-                    {alt === userAnswer &&
+                    {alt === userAnswer && (
                       <Image
                         style={[styles.icon, styles.selectedPrefix]}
                         source={require("./res/cross.png")}
-                      />}
+                      />
+                    )}
                   </View>
                   <TPText style={styles.prefix}>
                     {PREFIX[i % PREFIX.length]}
@@ -91,8 +85,9 @@ export default class Question extends React.PureComponent {
                   <TPText style={styles.alternativeText}>{alt}</TPText>
                 </View>
               </TouchableOpacity>
-            )}
-          </View>}
+            ))}
+          </View>
+        )}
       </View>
     );
   }

@@ -6,7 +6,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   View,
-  ScrollView,
+  FlatList,
   LayoutAnimation,
   UIManager
 } from "react-native";
@@ -22,11 +22,12 @@ const Center = props => <View {...props} style={{ alignItems: "center" }} />;
 export default class QuestionList extends React.PureComponent {
   static navigationOptions = {
     tabBarLabel: "Upplåsta",
-    tabBarIcon: ({ tintColor }) =>
+    tabBarIcon: ({ tintColor }) => (
       <Image
         source={require("./res/list.png")}
         style={[styles.icon, { tintColor: tintColor }]}
       />
+    )
   };
 
   state = {
@@ -76,23 +77,19 @@ export default class QuestionList extends React.PureComponent {
     }
 
     return (
-      <ScrollView
+      <FlatList
         style={styles.container}
-        refreshControl={
-          <RefreshControl
-            refreshing={loadingQuestions}
-            onRefresh={refreshData}
-          />
-        }
-      >
-        {_.isEmpty(questions) &&
+        onRefresh={refreshData}
+        refreshing={loadingQuestions}
+        ListEmptyComponent={
           <View style={styles.container}>
             <Center>
-              <Text> Gå hem, de é fan tomt. </Text>
+              <Text>Gå hem, de é fan tomt.</Text>
             </Center>
-          </View>}
-
-        {questions.map((q, i) =>
+          </View>
+        }
+        data={questions}
+        renderItem={({ item: q, index: i }) => (
           <Question
             onPressHeader={() => this.setOpen(q.id)}
             open={q.id === openKey}
@@ -103,7 +100,7 @@ export default class QuestionList extends React.PureComponent {
             submitAnswer={submitAnswer}
           />
         )}
-      </ScrollView>
+      />
     );
   }
 }

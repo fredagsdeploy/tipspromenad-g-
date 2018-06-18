@@ -9,8 +9,9 @@ import { distanceUpdateInterval } from "./config";
 import _ from "lodash";
 
 import TPText from "./TPText";
+import { withRouter } from "react-router";
 
-class DistanceView extends React.PureComponent {
+class DistanceView extends React.Component {
   static navigationOptions = {
     tabBarLabel: "Sträcka",
     tabBarIcon: ({ tintColor }) => (
@@ -38,8 +39,8 @@ class DistanceView extends React.PureComponent {
       require("./res/nyfraga.mp3"),
       require("./res/fart.mp3")
     ].map(res => {
-      let sound = new Audio.Sound();
-      return sound.loadAsync(res).then(() => sound);
+      // let sound = new Audio.Sound();
+      // return sound.loadAsync(res).then(() => sound);
     });
 
     try {
@@ -50,18 +51,7 @@ class DistanceView extends React.PureComponent {
   };
 
   async componentWillMount() {
-    this.loadSounds();
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== "granted") {
-      this.setState({
-        errorMessage: "Permission to access location was denied"
-      });
-    }
-
-    Location.watchPositionAsync(
-      { enableHighAccuracy: true, distanceInterval: distanceUpdateInterval },
-      this.positionUpdate
-    );
+    // this.loadSounds();
   }
 
   REMOVEINPROD_increaseDistance = () => {
@@ -112,28 +102,21 @@ class DistanceView extends React.PureComponent {
   };
 
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps, this.props);
     if (nextProps.coords !== this.props.coords) {
       this.positionUpdate({ coords: nextProps.coords });
     }
     if (
       nextProps.screenProps.unlockCount !== this.props.screenProps.unlockCount
     ) {
-      this.playRandomSound();
-      Alert.alert(
-        "Ny fråga, va!",
-        "Du har en ny fråga att svara på, änna",
-        [
-          {
-            text: "Jajjamen vettu",
-            onPress: () => this.props.navigation.navigate("Home")
-          },
-          {
-            text: "Nahh, tarn senare",
-            style: "cancel"
-          }
-        ],
-        { cancelable: false }
+      // this.playRandomSound();
+      const res = window.confirm(
+        "Ny fråga, va!\nDu har en ny fråga att svara på, änna"
       );
+
+      if (res) {
+        this.props.history.push("/");
+      }
     }
   }
 
@@ -152,7 +135,7 @@ class DistanceView extends React.PureComponent {
   }
 }
 
-export default withGeoPosition(DistanceView);
+export default withRouter(withGeoPosition(DistanceView));
 
 const styles = StyleSheet.create({
   container: {

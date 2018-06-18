@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Tipspromenad GÅ",
+  "name": "Tipspromenad GÅ",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,7 +8,8 @@
       "type": "image/x-icon"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "/",
+  "orientation": "portrait",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"

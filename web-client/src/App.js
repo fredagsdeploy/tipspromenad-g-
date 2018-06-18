@@ -1,5 +1,6 @@
 import React from "react";
 import { AsyncStorage, StyleSheet, Text, TextInput, View } from "react-native";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import { fetchJson, patchJson, fetchMe, postJson } from "./fetch";
 import Routes from "./Routes";
@@ -30,16 +31,12 @@ export default class App extends React.Component {
   };
 
   updateQuestion = data => {
-    return patchJson("/questions", data, deviceID).then(() => {
-      this.fetchQuestions();
-    });
+    return patchJson("/questions", data, deviceID).then(this.fetchQuestions);
   };
 
   submitAnswer = (questionId, answer) => {
     return postJson("/answers", { id: questionId, answer }, deviceID).then(
-      () => {
-        this.fetchAnswers();
-      }
+      this.fetchAnswers
     );
   };
 
@@ -98,6 +95,7 @@ export default class App extends React.Component {
   fetchQuestions = async () => {
     try {
       const questions = await fetchJson("/questions");
+      console.log("Questions", questions);
       this.setState({
         loadingQuestions: false,
         questions
@@ -110,6 +108,7 @@ export default class App extends React.Component {
   fetchAnswers = async () => {
     try {
       const answers = await fetchJson("/answers");
+      console.log("Answers", answers);
       this.setState({
         loadingAnswers: false,
         answers
@@ -119,14 +118,12 @@ export default class App extends React.Component {
     }
   };
 
-  getUser = () => fetchMe(deviceID);
-
   async componentWillMount() {
     this.refreshData();
     this.loadPersistDistance();
 
     try {
-      const user = await this.getUser();
+      const user = await fetchMe(deviceID);
       if (user) {
         this.setState({
           user
@@ -155,25 +152,27 @@ export default class App extends React.Component {
     } else {
       return (
         <View style={styles.container}>
-          <Routes
-            screenProps={{
-              submitQuestion: this.submitQuestion,
-              refreshData: this.refreshData,
-              updateQuestion: this.updateQuestion,
-              loading: loadingQuestions || loadingAnswers || loadingAppmode,
-              answers,
-              questions,
-              distance,
-              appModeDone: appMode === "DONE",
-              userId: user.nick,
-              setDistance: this.setDistance,
-              submitAnswer: this.submitAnswer,
-              unlockCount: Math.min(
-                Math.floor(distance / unlockDistanceInterval),
-                questions.length
-              )
-            }}
-          />
+          <Router>
+            <Routes
+              props={{
+                submitQuestion: this.submitQuestion,
+                refreshData: this.refreshData,
+                updateQuestion: this.updateQuestion,
+                loading: loadingQuestions || loadingAnswers || loadingAppmode,
+                answers,
+                questions,
+                distance,
+                appModeDone: appMode === "DONE",
+                userId: user.nick,
+                setDistance: this.setDistance,
+                submitAnswer: this.submitAnswer,
+                unlockCount: Math.min(
+                  Math.floor(distance / unlockDistanceInterval),
+                  questions.length
+                )
+              }}
+            />
+          </Router>
         </View>
       );
     }

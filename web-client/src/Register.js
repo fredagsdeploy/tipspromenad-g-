@@ -42,7 +42,7 @@ export default class Register extends React.Component {
     const { nick, error } = this.state;
     const { style } = this.props;
     return (
-      <View style={[style, styles.container]}>
+      <Container style={style}>
         <LinearGradient colors={["#A6D6F0", "#fff"]} style={styles.gradient}>
           <Image source={require("./res/logo.png")} style={[styles.logo]} />
           <TPText style={styles.header}>Skriv in nick, änna</TPText>
@@ -54,19 +54,15 @@ export default class Register extends React.Component {
               value={nick}
             />
             <RedButton onPress={this.createUser}>Nu kôr vi!</RedButton>
-            <Image source={require("./res/start.png")} style={[styles.image]} />
+            <Image source={require("./res/start.png")} style={styles.image} />
           </Center>
         </LinearGradient>
-      </View>
+      </Container>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#A6D6F0"
-  },
   header: { fontSize: 20, padding: 5, backgroundColor: "transparent" },
   error: { marginVertical: 5, color: "tomato" },
   textInput: {
@@ -80,3 +76,14 @@ const styles = StyleSheet.create({
   image: { flex: 1, resizeMode: "contain" },
   gradient: { flex: 1, alignItems: "center", justifyContent: "center" }
 });
+
+const Container = styled.View`
+  flex: 1;
+  background-color: #a6d6f0;
+  /* Status bar height on iOS 10 */
+  padding-top: 20px;
+  /* Status bar height on iOS 11.0 */
+  padding-top: constant(safe-area-inset-top);
+  /* Status bar height on iOS 11+ */
+  padding-top: env(safe-area-inset-top);
+`;
