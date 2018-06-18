@@ -1,7 +1,9 @@
 #!/bin/bash
+IP=192.168.1.199
+PORT=3001
 
 curl -X POST \
-  http://83.254.26.186:3001/users \
+  http://$IP:$PORT/users \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -H 'postman-token: 795fbdad-b67f-e5fc-38bf-31dcd0720486' \
@@ -11,7 +13,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -23,7 +25,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -35,7 +37,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -47,7 +49,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -59,7 +61,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -71,7 +73,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -83,7 +85,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -95,7 +97,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -107,7 +109,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -119,7 +121,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -131,7 +133,7 @@ curl -X POST \
 }'
 
 curl -X POST \
-  http://83.254.26.186:3001/questions \
+  http://$IP:$PORT/questions \
   -H 'authorization: 1337' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
