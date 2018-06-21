@@ -34,12 +34,6 @@ const NavButton = ({ icon, children, ...props }) => (
       textDecoration: "none",
       fontFamily: plaintextFont
     }}
-    activeStyle={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      color: primaryColor
-    }}
   >
     {({ isActive }) => (
       <React.Fragment>
@@ -51,7 +45,9 @@ const NavButton = ({ icon, children, ...props }) => (
             tintColor: isActive ? primaryColor : baseTextColor
           }}
         />
-        {children}
+        <span style={{ color: isActive ? primaryColor : baseTextColor }}>
+          {children}
+        </span>
       </React.Fragment>
     )}
   </TPNavLink>
