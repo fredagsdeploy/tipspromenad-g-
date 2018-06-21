@@ -37,14 +37,26 @@ const NavButton = ({ icon, children, ...props }) => (
   >
     {({ isActive }) => (
       <React.Fragment>
-        <Image
-          source={icon}
-          style={{
-            width: 26,
-            height: 26,
-            tintColor: isActive ? primaryColor : baseTextColor
-          }}
-        />
+        <svg width="26" height="26">
+          <defs>
+            <filter id="tint-primary">
+              <feFlood floodColor={primaryColor} />
+              <feComposite in2="SourceAlpha" operator="atop" />
+            </filter>
+            <filter id="tint-baseText">
+              <feFlood floodColor={baseTextColor} />
+              <feComposite in2="SourceAlpha" operator="atop" />
+            </filter>
+          </defs>
+          <image
+            width="26"
+            height="26"
+            href={icon}
+            style={{
+              filter: `url(${isActive ? "#tint-primary" : "#tint-baseText"})`
+            }}
+          />
+        </svg>
         <span style={{ color: isActive ? primaryColor : baseTextColor }}>
           {children}
         </span>
