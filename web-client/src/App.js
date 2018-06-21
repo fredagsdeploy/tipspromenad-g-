@@ -150,8 +150,8 @@ export default class App extends React.Component {
     } = this.state;
     if (!user) {
       return (
-        <SafeContainer>
-          <Register style={{ flex: 1 }} setUser={this.setUser} />
+        <SafeContainer style={{ flex: 1, backgroundColor: "#a6d6f0" }}>
+          <Register setUser={this.setUser} />
         </SafeContainer>
       );
     } else {
@@ -186,7 +186,6 @@ export default class App extends React.Component {
 
 const SafeContainer = styled.View`
   flex: 1;
-  background-color: #a6d6f0;
   /* Status bar height on iOS 10 */
   padding-top: 20px;
   /* Status bar height on iOS 11.0 */
