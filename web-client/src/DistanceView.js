@@ -8,6 +8,12 @@ import _ from "lodash";
 import TPText from "./TPText";
 import { withRouter } from "react-router";
 
+const SOUNDS = [
+  { name: "plopp", src: require("./res/plopp.mp3") },
+  { name: "nyfraga", src: require("./res/nyfraga.mp3") },
+  { name: "fart", src: require("./res/fart.mp3") }
+];
+
 class DistanceView extends React.Component {
   static navigationOptions = {
     tabBarLabel: "Sträcka",
@@ -27,22 +33,8 @@ class DistanceView extends React.Component {
   };
 
   playRandomSound = () => {
-    const sound = _.sample(this.sounds);
-    sound.playAsync().then(() => sound.setPositionAsync(0));
-  };
-
-  loadSounds = async () => {
-    const sounds = [
-      require("./res/plopp.mp3"),
-      require("./res/nyfraga.mp3"),
-      require("./res/fart.mp3")
-    ];
-
-    try {
-      this.sounds = await Promise.all(sounds);
-    } catch (error) {
-      console.log("Could not load sound", error);
-    }
+    const sound = _.sample(SOUNDS.map(s => s.name));
+    this[sound].play(); // set position 0
   };
 
   REMOVEINPROD_increaseDistance = () => {
@@ -114,7 +106,7 @@ class DistanceView extends React.Component {
     if (
       nextProps.screenProps.unlockCount !== this.props.screenProps.unlockCount
     ) {
-      // this.playRandomSound();
+      this.playRandomSound();
       const res = window.confirm(
         "Ny fråga, va!\nDu har en ny fråga att svara på, änna"
       );
@@ -137,6 +129,10 @@ class DistanceView extends React.Component {
           )}
         </Motion>
         {error && <pre>{JSON.stringify(error, null, 2)}</pre>}
+        {SOUNDS.map(({ name, src }) => (
+          <audio src={src} key={name} ref={ref => (this[name] = ref)} />
+        ))}
+        <button onClick={this.playRandomSound}>playRandomSound</button>
       </View>
     );
   }
