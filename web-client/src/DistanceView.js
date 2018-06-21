@@ -136,7 +136,7 @@ class DistanceView extends React.Component {
             <TPText style={styles.distanceDisplay}>{Math.ceil(value)}m</TPText>
           )}
         </Motion>
-        {error && <pre>JSON.stringify(error, null, 2)</pre>}
+        {error && <pre>{JSON.stringify(error, null, 2)}</pre>}
       </View>
     );
   }
