@@ -111,9 +111,11 @@ class DistanceView extends React.Component {
         "Ny fråga, va!\nDu har en ny fråga att svara på, änna"
       );
 
-      if (res) {
-        this.props.history.push("/");
-      }
+      setTimeout(() => {
+        if (res) {
+          this.props.history.push("/");
+        }
+      }, 5000);
     }
   }
 
