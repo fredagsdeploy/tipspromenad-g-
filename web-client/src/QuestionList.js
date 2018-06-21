@@ -3,19 +3,13 @@ import {
   StyleSheet,
   Text,
   Image,
-  RefreshControl,
   ActivityIndicator,
   View,
   FlatList,
-  LayoutAnimation,
-  UIManager
+  LayoutAnimation
 } from "react-native";
 
-import _ from "lodash";
-
 import Question from "./Question";
-
-import { primaryColor, unlockDistanceInterval } from "./config";
 
 const Center = props => <View {...props} style={{ alignItems: "center" }} />;
 
@@ -80,6 +74,7 @@ export default class QuestionList extends React.PureComponent {
       <FlatList
         style={styles.container}
         onRefresh={refreshData}
+        keyExtractor={item => item.id}
         refreshing={loadingQuestions}
         ListEmptyComponent={
           <View style={styles.container}>

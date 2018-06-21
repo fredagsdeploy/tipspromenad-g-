@@ -1,5 +1,5 @@
 import React from "react";
-import { AsyncStorage, StyleSheet, Text, TextInput, View } from "react-native";
+import { AsyncStorage, StyleSheet, View } from "react-native";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import { fetchJson, patchJson, fetchMe, postJson } from "./fetch";

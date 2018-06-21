@@ -1,9 +1,8 @@
-import React from "react";
 import styled from "styled-components/native";
 
 import { plaintextFont } from "./config";
 
 export default styled.TextInput`
   padding: 5px 7px;
-  font-family: ${plaintextFont}
+  font-family: ${plaintextFont};
 `;

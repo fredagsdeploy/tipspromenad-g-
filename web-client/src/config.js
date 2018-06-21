@@ -1,5 +1,3 @@
-import { Platform } from "react-native";
-
 export const primaryColor = "#ed1c24";
 export const selectColor = "#1ac673";
 export const baseTextColor = "#333";

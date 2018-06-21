@@ -1,10 +1,7 @@
 import React from "react";
-import { StyleSheet, Image, View, Alert } from "react-native";
+import { StyleSheet, Image, View } from "react-native";
 // import { Location, Permissions, Audio } from "expo";
 import { Motion, spring } from "react-motion";
-import { withGeoPosition } from "react-fns";
-
-import { distanceUpdateInterval } from "./config";
 
 import _ from "lodash";
 
@@ -25,7 +22,8 @@ class DistanceView extends React.Component {
   state = {
     latitude: 0,
     longitude: 0,
-    altitude: 0
+    altitude: 0,
+    error: null
   };
 
   playRandomSound = () => {
@@ -38,10 +36,7 @@ class DistanceView extends React.Component {
       require("./res/plopp.mp3"),
       require("./res/nyfraga.mp3"),
       require("./res/fart.mp3")
-    ].map(res => {
-      // let sound = new Audio.Sound();
-      // return sound.loadAsync(res).then(() => sound);
-    });
+    ];
 
     try {
       this.sounds = await Promise.all(sounds);
@@ -49,10 +44,6 @@ class DistanceView extends React.Component {
       console.log("Could not load sound", error);
     }
   };
-
-  async componentWillMount() {
-    // this.loadSounds();
-  }
 
   REMOVEINPROD_increaseDistance = () => {
     const { setDistance, distance } = this.props.screenProps;
@@ -76,7 +67,19 @@ class DistanceView extends React.Component {
     return d * 1000; // meters
   };
 
+  componentWillMount() {
+    navigator.geolocation.watchPosition(
+      this.positionUpdate,
+      this.positionError,
+      {
+        enableHighAccuracy: true
+      }
+    );
+    console.log("registered position");
+  }
+
   positionUpdate = ({ coords: { latitude, longitude } }) => {
+    console.log("position update", latitude, longitude);
     this.setState(state => {
       if (state.latitude === 0) {
         return {
@@ -101,11 +104,13 @@ class DistanceView extends React.Component {
     });
   };
 
+  positionError = error => {
+    this.setState({
+      error
+    });
+  };
+
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps, this.props);
-    if (nextProps.coords !== this.props.coords) {
-      this.positionUpdate({ coords: nextProps.coords });
-    }
     if (
       nextProps.screenProps.unlockCount !== this.props.screenProps.unlockCount
     ) {
@@ -122,6 +127,7 @@ class DistanceView extends React.Component {
 
   render() {
     const { distance } = this.props.screenProps;
+    const { error } = this.state;
 
     return (
       <View style={styles.container}>
@@ -130,12 +136,13 @@ class DistanceView extends React.Component {
             <TPText style={styles.distanceDisplay}>{Math.ceil(value)}m</TPText>
           )}
         </Motion>
+        {error && <pre>JSON.stringify(error, null, 2)</pre>}
       </View>
     );
   }
 }
 
-export default withRouter(withGeoPosition(DistanceView));
+export default withRouter(DistanceView);
 
 const styles = StyleSheet.create({
   container: {

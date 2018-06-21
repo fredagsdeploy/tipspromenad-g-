@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Image,
-  View
-} from "react-native";
+import { StyleSheet, TouchableOpacity, Image, View } from "react-native";
 
 import TPText from "./TPText";
 

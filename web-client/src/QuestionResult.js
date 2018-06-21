@@ -1,18 +1,8 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Image,
-  View
-} from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { primaryColor, selectColor } from "./config";
-import _ from "lodash";
 import TPText from "./TPText";
-
-const PREFIX = ["1", "X", "2"];
 
 export default class QuestionResult extends React.PureComponent {
   getCorrectUsers = (question, userAnswers) => {
@@ -38,24 +28,27 @@ export default class QuestionResult extends React.PureComponent {
       <View style={styles.container}>
         <TouchableOpacity onPress={() => onPressHeader(question.id)}>
           <View>
-            <TPText style={styles.prefix}>
-              {question.question}
-            </TPText>
+            <TPText style={styles.prefix}>{question.question}</TPText>
           </View>
         </TouchableOpacity>
 
         <View style={styles.subContainer}>
-          {open &&
+          {open && (
             <View>
               <TPText style={styles.greenText}>
                 Antal rätt: {correctUsers.length}
               </TPText>
               <View style={styles.namesContainer}>
                 {correctUsers.map(user => {
-                  return <TPText key={user} style={styles.name}>{user}</TPText>;
+                  return (
+                    <TPText key={user} style={styles.name}>
+                      {user}
+                    </TPText>
+                  );
                 })}
               </View>
-            </View>}
+            </View>
+          )}
         </View>
       </View>
     );

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { ActivityIndicator, Platform } from "react-native";
+import { ActivityIndicator } from "react-native";
 
 import { primaryColor } from "./config";
 

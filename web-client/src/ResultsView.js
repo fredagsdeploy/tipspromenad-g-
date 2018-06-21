@@ -1,7 +1,6 @@
 import React from "react";
 import {
   StyleSheet,
-  TextInput,
   RefreshControl,
   Image,
   View,
@@ -14,16 +13,15 @@ import QuestionResult from "./QuestionResult.js";
 
 import _ from "lodash";
 
-const Center = props => <View {...props} style={{ alignItems: "center" }} />;
-
 export default class ResultView extends React.Component {
   static navigationOptions = {
     tabBarLabel: "Resultat",
-    tabBarIcon: ({ tintColor }) =>
+    tabBarIcon: ({ tintColor }) => (
       <Image
         source={require("./res/result.png")}
         style={[styles.icon, { tintColor: tintColor }]}
       />
+    )
   };
 
   state = { openKey: null };
@@ -41,7 +39,8 @@ export default class ResultView extends React.Component {
       return question.alternatives[question.correctAlternative] === userAnswer;
     };
 
-    return _.chain(questions)
+    return _
+      .chain(questions)
       .reduce((acc, question) => {
         const currentQuestionUserAnswers = answers[question.id];
         if (
@@ -122,13 +121,7 @@ export default class ResultView extends React.Component {
   };
 
   render() {
-    const {
-      questions,
-      appModeDone,
-      answers,
-      loading,
-      refreshData
-    } = this.props.screenProps;
+    const { appModeDone, loading, refreshData } = this.props.screenProps;
 
     return (
       <ScrollView
