@@ -9,6 +9,7 @@ import Register from "./Register";
 import { unlockDistanceInterval } from "./config";
 import _ from "lodash";
 import { getDeviceId } from "./lib/get_device_id";
+import styled from "styled-components/native";
 
 const deviceID = getDeviceId();
 
@@ -148,10 +149,14 @@ export default class App extends React.Component {
       appMode
     } = this.state;
     if (!user) {
-      return <Register style={styles.container} setUser={this.setUser} />;
+      return (
+        <SafeContainer>
+          <Register style={{ flex: 1 }} setUser={this.setUser} />
+        </SafeContainer>
+      );
     } else {
       return (
-        <View style={styles.container}>
+        <SafeContainer style={{ flex: 1 }}>
           <Router>
             <Routes
               props={{
@@ -173,14 +178,23 @@ export default class App extends React.Component {
               }}
             />
           </Router>
-        </View>
+        </SafeContainer>
       );
     }
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});
+const SafeContainer = styled.View`
+  flex: 1;
+  background-color: #a6d6f0;
+  /* Status bar height on iOS 10 */
+  padding-top: 20px;
+  /* Status bar height on iOS 11.0 */
+  padding-top: constant(safe-area-inset-top);
+  /* Status bar height on iOS 11+ */
+  padding-top: env(safe-area-inset-top);
+
+  padding-bottom: 20px;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-top);
+`;
