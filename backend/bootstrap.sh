@@ -1,5 +1,5 @@
 #!/bin/bash
-IP=192.168.1.199
+IP=localhost
 PORT=3001
 
 curl -X POST \
